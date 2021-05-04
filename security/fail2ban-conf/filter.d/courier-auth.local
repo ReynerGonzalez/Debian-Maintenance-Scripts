@@ -1,0 +1,8 @@
+# See: https://github.com/fail2ban/fail2ban/issues/1151
+
+[Definition]
+
+#           From courier-auth.conf
+failregex = ^%(__prefix_line)sLOGIN FAILED, (?:user|method)=.*, ip=\[<HOST>\]$
+
+# Author: Viktor Szépe

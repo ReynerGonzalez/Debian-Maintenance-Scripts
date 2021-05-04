@@ -1,0 +1,72 @@
+#!/bin/bash
+#
+# Extract hostname from URL and execute dig command.
+#
+# VERSION       :1.0.0
+# DATE          :2020-01-06
+# AUTHOR        :Viktor Szépe <viktor@szepe.net>
+# LICENSE       :The MIT License (MIT)
+# URL           :https://github.com/szepeviktor/debian-server-tools
+# BASH-VERSION  :4.2+
+# DEPENDS       :apt-get install dnsutils
+# LOCATION      :/usr/local/bin/host
+
+# Usage
+#
+# The URL must be the last option.
+
+Get_hostname()
+{
+    local URL="$1"
+
+    # Strip protocol, e.g. http://
+    URL="${URL#*//}"
+    # Strip path and query, e.g. /contact/
+    URL="${URL%%/*}"
+    # Strip port, e.g. :8080
+    if [ "${URL//[^:]/}" == ":" ]; then
+        echo "${URL%:*}"
+        return
+    fi
+
+    echo "$URL"
+}
+
+Host()
+{
+    local HOST="$1"
+
+    shift
+
+    while read -r RR; do
+        echo "${HOST%.} has address ${RR}"
+    done < <(dig +short "$@" "$HOST" A)
+
+    while read -r RR; do
+        echo "${HOST%.} has IPv6 address ${RR}"
+    done < <(dig +short "$@" "$HOST" AAAA)
+
+    while read -r RR; do
+        echo "${HOST%.} mail is handled by ${RR}"
+    done < <(dig +short "$@" "$HOST" MX)
+}
+
+test -z "$*" && exit 1
+
+declare -a ARG_ARR
+declare -i LAST_INDEX
+
+# Copy command line arguments into ARG_ARR
+for ARG; do
+    ARG_ARR+=( "${ARG}" )
+done
+
+LAST_INDEX="$(( ${#ARG_ARR[@]} - 1 ))"
+
+# Extract hostname
+ARG_ARR[$LAST_INDEX]="$(Get_hostname "${ARG_ARR[$LAST_INDEX]}")"
+
+# Empty hostname
+test -z "${ARG_ARR[$LAST_INDEX]}" && exit 2
+
+Host "${ARG_ARR[@]}"

@@ -1,0 +1,25 @@
+#
+# SpamAssassin config file: Custom DNS blacklist
+#
+# COMMENT       :spammer.dnsbl on worker.szepe.net.
+# LOCATION      :/etc/spamassassin/20_spammer.dnsbl.cf
+
+ifplugin Mail::SpamAssassin::Plugin::DNSEval
+
+header   __RCVD_IN_BL_SPAMMER eval:check_rbl('spammer', 'spammer.dnsbl.')
+tflags   __RCVD_IN_BL_SPAMMER net
+describe __RCVD_IN_BL_SPAMMER SPAMMER: Received via a relay
+
+# Spammer
+header   RCVD_IN_BL_SPAMMER_IS eval:check_rbl_sub('spammer', '127.0.0.1')
+tflags   RCVD_IN_BL_SPAMMER_IS net
+describe RCVD_IN_BL_SPAMMER_IS Is a SPAMMER
+score    RCVD_IN_BL_SPAMMER_IS 10.0
+
+# Neighbour of a spammer
+header   RCVD_IN_BL_SPAMMER_NEIGH eval:check_rbl_sub('spammer', '127.0.0.2')
+tflags   RCVD_IN_BL_SPAMMER_NEIGH net
+describe RCVD_IN_BL_SPAMMER_NEIGH Neighbour of a SPAMMER
+score    RCVD_IN_BL_SPAMMER_NEIGH 3.0
+
+endif

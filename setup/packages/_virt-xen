@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -e -x
+
+# Detect Xen
+if [ ! -r /sys/hypervisor/type ] || [ "$(cat /sys/hypervisor/type)" != xen ]; then
+    exit 1
+fi
+# Xen UUID
+if [ ! -e /sys/hypervisor/uuid ]; then
+    exit 1
+fi
+cat /sys/hypervisor/uuid
+if [ ! -c /dev/mem ]; then
+    exit 1
+fi
+# Xen type: HVM/PV-HVM/PV
+dmidecode -s system-product-name
+
+# Xen VM monitoring through XenStore
+cd /root/dist-mod/
+wget -nv -nc "http://mirror.1and1.com/software/local-updates/XenServer_Tools/Linux/xe-guest-utilities_6.5.0-1423_amd64.deb"
+dpkg -i xe-guest-utilities_*.deb
+
+# Xen unique domain ID
+xenstore-read "/local/domain/$(xenstore-read "domid")/unique-domain-id"
+# Xen details
+xenstore-ls "/local/domain/$(xenstore-read "domid")"
+
+# Xen Serial Console
+if Is_installed systemd; then
+    # Systemd
+    systemctl enable serial-getty@ttyS0.service
+    systemctl start serial-getty@ttyS0.service
+else
+    # SysVinit
+    cat >> /etc/inittab <<"EOF"
+
+s1:2345:respawn:/sbin/agetty -L ttyS0 115200 vt102
+
+EOF
+fi

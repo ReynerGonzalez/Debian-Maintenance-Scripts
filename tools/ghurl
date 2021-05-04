@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# Display GitHub download URL for a local file.
+#
+# VERSION       :1.0.0
+# DATE          :2018-05-18
+# AUTHOR        :Viktor Szépe <viktor@szepe.net>
+# URL           :https://github.com/szepeviktor/debian-server-tools
+# LICENSE       :The MIT License (MIT)
+# BASH-VERSION  :4.2+
+# DEPENDS       :apt-get install git jq
+# LOCATION      :/usr/local/bin/ghurl
+
+set -e
+
+LOCAL_FILE="$1"
+
+test -r "$LOCAL_FILE"
+
+ORIGIN_URL="$(git config --get remote.origin.url)"
+
+USER_REPO="${ORIGIN_URL#*:}"
+USER_REPO="${USER_REPO%.git}"
+# TODO Should look like "[.A-Za-z0-9_-]\+\.[.A-Za-z0-9_-]\+"
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+RELATIVE_PATH="$(realpath --relative-to="$REPO_ROOT" "$LOCAL_FILE")"
+
+wget -q -O- "https://api.github.com/repos/${USER_REPO}/contents/${RELATIVE_PATH}" \
+    | jq -r ".download_url" \
+    | grep -F 'https://'

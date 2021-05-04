@@ -1,0 +1,51 @@
+# AS32181 - GigeNET
+#: ipset -exist restore <ipset/gigenet.ipset
+#: iptables -w -I myattackers-ipset -m set --match-set gigenet src -j REJECT
+create gigenet hash:net family inet hashsize 64 maxelem 128
+flush gigenet
+# TrafficTransitSolution
+add gigenet 83.171.225.0/24
+
+# AS8100 - QuadraNet
+# Trusov Ilya Igorevych
+add gigenet 5.188.217.0/24
+# FINE GROUP SERVERS SOLUTIONS
+add gigenet 79.110.28.0/24
+# TRUSOV
+add gigenet 79.110.31.0/24
+# TRUSOV
+add gigenet 185.14.194.0/24
+# ATOMOHOST
+add gigenet 185.89.100.0/23
+# TrafficTransitSolution
+#add gigenet 45.132.186.0/24
+#add gigenet 45.148.127.0/24
+#add gigenet 185.88.101.0/24
+
+# AS46844 - Sharktech
+# Trusov Ilya Igorevych
+add gigenet 37.9.44.0/22
+# FINE GROUP SERVERS SOLUTIONS
+add gigenet 178.159.99.0/24
+# TrafficTransitSolution
+#add gigenet 5.183.253.0/24
+#add gigenet 5.183.254.0/24
+#add gigenet 45.66.209.0/24
+#add gigenet 45.67.212.0/23
+#add gigenet 45.67.214.0/24
+#add gigenet 45.132.185.0/24
+#add gigenet 45.132.187.0/24
+#add gigenet 45.138.101.0/24
+#add gigenet 45.138.103.0/24
+#add gigenet 45.148.126.0/24
+#add gigenet 77.83.85.0/24
+#add gigenet 85.208.85.0/24
+#add gigenet 85.208.86.0/23
+#add gigenet 88.218.65.0/24
+#add gigenet 88.218.66.0/23
+#add gigenet 89.191.228.0/23
+#add gigenet 141.98.85.0/24
+#add gigenet 141.98.86.0/24
+#add gigenet 185.61.216.0/24
+#add gigenet 185.61.220.0/24
+#add gigenet 185.88.102.0/24

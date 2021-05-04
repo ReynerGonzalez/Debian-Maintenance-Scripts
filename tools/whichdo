@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Execute a command on the output of `which FILE`.
+#
+# VERSION       :0.2.1
+# DATE          :2015-05-22
+# AUTHOR        :Viktor Szépe <viktor@szepe.net>
+# LICENSE       :The MIT License (MIT)
+# URL           :https://github.com/szepeviktor/debian-server-tools
+# BASH-VERSION  :4.2+
+# LOCATION      :/usr/local/bin/whichdo
+
+# Usage
+#
+# whichdo FILE [COMMAND [ARG] ...]
+
+WHICH_FILE="$(which "$1")"
+
+[ -r "$WHICH_FILE" ] || exit 1
+
+# Behave like `which` without COMMAND
+if [ $# -lt 2 ]; then
+    echo "$WHICH_FILE"
+    # Resolve symbolic link
+    if [ -L "$WHICH_FILE" ]; then
+        echo -n "-> "
+        exec "$0" "$(readlink "$WHICH_FILE")"
+    fi
+    exit
+fi
+
+shift
+exec "$@" "$WHICH_FILE"

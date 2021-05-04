@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e -x
+
+# https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
+EXPECTED_SIGNATURE="$(wget -qO- "https://composer.github.io/installer.sig")"
+php -r 'copy("https://getcomposer.org/installer", "composer-setup.php");'
+ACTUAL_SIGNATURE="$(php -r 'echo hash_file("sha384", "composer-setup.php");')"
+
+if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]; then
+    echo "ERROR: Invalid composer installer signature" 1>&2
+    rm -f composer-setup.php
+    exit 1
+fi
+
+php composer-setup.php --install-dir /usr/local/bin --filename composer
+rm composer-setup.php
+
+# Display latest version number
+#     wget -q -O- "https://getcomposer.org/versions" | jq -r '.stable[0].version'
+#     wget -q -O- "https://repo.packagist.org/p/composer/composer.json" \
+#         | jq -r '[."packages"."composer/composer"[] | select(."version" | test("^[0-9.]+$"))] | last."version"'

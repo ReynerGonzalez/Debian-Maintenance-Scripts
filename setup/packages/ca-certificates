@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Review changelog of ca-certificates
+#     http://metadata.ftp-master.debian.org/changelogs/main/c/ca-certificates/testing_changelog
+
+set -e -x
+
+# Update ca-certificates
+# https://tracker.debian.org/pkg/ca-certificates
+if [ "$(Data get-value package.ca-certificates.install-testing)" == True ]; then
+    Getpkg ca-certificates testing
+    test -f /etc/ca-certificates.conf.dpkg-old && rm /etc/ca-certificates.conf.dpkg-old
+fi
+
+# Install certificates
+Dinstall security/cert-update.sh
+
+# Monitor certificates
+Dinstall monitoring/cert-expiry.sh

@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# Check Fail2ban iptables chains and myattackers ipset chain.
+#
+# VERSION       :0.3.2
+# LOCATION      :/usr/local/sbin/fail2ban-test.sh
+
+MYA_IPSET_CHAIN="myattackers-ipset"
+
+set -e
+
+JAILS="$(/usr/bin/fail2ban-client status | sed -n -e 's/, / /g' -e 's/^.*Jail list:\s\+\(.*\)$/\1/p')"
+
+test -n "$JAILS"
+
+# Check also myattackers-ipset
+if CHAIN_LIST="$(/sbin/iptables -n -w -L "$MYA_IPSET_CHAIN" 2>/dev/null)"; then
+    grep -q ' (1 references)$' <<<"$CHAIN_LIST"
+fi
+
+# Check Fail2ban-managed chain
+/sbin/iptables -n -w -L fail2ban | grep -q ' (1 references)$'
+
+# Check all jail chains
+for JAIL in ${JAILS}; do
+    # No iptables chain for these jails
+    if [ "$JAIL" == proftpd-notif ] || [[ "$JAIL" =~ ^apache-cf.* ]]; then
+        continue
+    fi
+
+    # Check chain existence and reference
+    CHAIN="f2b-${JAIL}"
+    /sbin/iptables -n -w -L "$CHAIN" | grep -q ' (1 references)$'
+done
+
+# Ping Fail2ban server
+/usr/bin/fail2ban-client ping | grep -F -x 'Server replied: pong'

@@ -1,0 +1,605 @@
+# Stretchoid, intuityconsultants.net, intuityconsulting.com, intuityconsulting.net type: SMTP,HTTP
+# https://otx.alienvault.com/pulse/59646c87b126746267e5cf22
+#: ipset -exist restore <ipset/stretchoid.ipset
+#: iptables -w -I myattackers-ipset -m set --match-set stretchoid src -j REJECT
+create stretchoid hash:net family inet hashsize 64 maxelem 512
+flush stretchoid
+# Import Atsushi Fukuda's list
+#$ wget -qO- https://www.atsushifukuda.jp/articles/stretchoid-com/ \
+#$   | grep -o '<td valign="top">[0-9]\+<wbr>.<wbr>[0-9]\+<wbr>.<wbr>[0-9]\+<wbr>.<wbr>[0-9]\+</td>' \
+#$   | sed -e 's#<[^>]*>##g' | cut -d. -f1-3 | sortip -u | sed -e 's|.*|# &.0/24|'
+# Update script
+#$ sed -n -e 's|^# \([0-9.]\+\.\)0/24$|\1|p' stretchoid.ipset | uniq | while read -r I; do echo "# ${I}0/24";
+#$   for L in {0..255}; do host -t PTR "$I$L" | grep -qF 'stretchoid.com.' && echo "add stretchoid $I$L"; done; done
+# 45.55.0.0/24
+# 45.55.1.0/24
+# 45.55.2.0/24
+# 45.55.3.0/24
+# 45.55.4.0/24
+# 45.55.6.0/24
+# 45.55.7.0/24
+# 45.55.8.0/24
+# 45.55.9.0/24
+# 45.55.10.0/24
+# 45.55.11.0/24
+# 45.55.12.0/24
+# 45.55.13.0/24
+# 45.55.14.0/24
+# 45.55.16.0/24
+# 45.55.17.0/24
+# 45.55.18.0/24
+# 45.55.19.0/24
+# 45.55.21.0/24
+# 45.55.22.0/24
+# 45.55.26.0/24
+# 45.55.28.0/24
+# 45.55.29.0/24
+# 45.55.30.0/24
+# 103.78.132.0/24
+# 104.131.133.0/24
+# 104.131.134.0/24
+# 104.131.135.0/24
+# 104.131.137.0/24
+# 104.131.138.0/24
+# 104.131.141.0/24
+# 104.131.144.0/24
+# 104.131.145.0/24
+# 104.131.146.0/24
+# 104.131.156.0/24
+# 104.236.149.0/24
+# 104.236.150.0/24
+# 104.236.152.0/24
+# 104.236.154.0/24
+# 104.236.155.0/24
+# 104.236.157.0/24
+# 104.236.159.0/24
+# 104.236.162.0/24
+# 104.236.163.0/24
+# 104.236.164.0/24
+# 104.236.165.0/24
+# 104.236.168.0/24
+# 104.236.169.0/24
+# 104.236.170.0/24
+# 104.236.172.0/24
+# 104.236.175.0/24
+# 104.236.176.0/24
+# 104.236.177.0/24
+# 104.236.180.0/24
+# 104.236.182.0/24
+# 104.236.183.0/24
+# 104.236.184.0/24
+# 104.236.185.0/24
+# 104.236.186.0/24
+# 104.236.187.0/24
+# 104.236.191.0/24
+# 107.170.192.0/24
+# 107.170.193.0/24
+# 107.170.194.0/24
+# 107.170.195.0/24
+# 107.170.196.0/24
+# 107.170.197.0/24
+# 107.170.198.0/24
+# 107.170.199.0/24
+# 107.170.200.0/24
+# 107.170.201.0/24
+# 107.170.202.0/24
+# 107.170.203.0/24
+# 107.170.204.0/24
+# 107.170.207.0/24
+# 107.170.209.0/24
+# 107.170.210.0/24
+# 107.170.211.0/24
+# 107.170.212.0/24
+# 107.170.213.0/24
+# 107.170.215.0/24
+# 107.170.216.0/24
+# 107.170.218.0/24
+# 107.170.219.0/24
+# 107.170.224.0/24
+# 107.170.225.0/24
+# 107.170.226.0/24
+# 107.170.228.0/24
+# 107.170.229.0/24
+# 107.170.230.0/24
+# 107.170.231.0/24
+# 107.170.233.0/24
+# 107.170.234.0/24
+# 107.170.237.0/24
+# 107.170.238.0/24
+# 107.170.239.0/24
+# 107.170.240.0/24
+# 107.170.244.0/24
+# 107.170.247.0/24
+# 107.170.249.0/24
+# 107.170.250.0/24
+add stretchoid 107.170.250.141
+# 107.170.251.0/24
+# 107.170.252.0/24
+# 107.170.253.0/24
+# 107.170.255.0/24
+# 159.203.197.0/24
+# 159.203.201.0/24
+# 159.203.240.0/24
+# 159.203.252.0/24
+# 159.203.255.0/24
+# 162.243.128.0/24
+# 162.243.129.0/24
+# 162.243.130.0/24
+add stretchoid 162.243.130.115
+# 162.243.131.0/24
+# 162.243.132.0/24
+# 162.243.133.0/24
+add stretchoid 162.243.133.121
+add stretchoid 162.243.133.214
+# 162.243.134.0/24
+add stretchoid 162.243.134.203
+# 162.243.135.0/24
+# 162.243.136.0/24
+# 162.243.137.0/24
+# 162.243.138.0/24
+add stretchoid 162.243.138.180
+# 162.243.139.0/24
+# 162.243.140.0/24
+add stretchoid 162.243.140.147
+# 162.243.141.0/24
+# 162.243.142.0/24
+# 162.243.143.0/24
+# 162.243.144.0/24
+# 162.243.145.0/24
+add stretchoid 162.243.145.91
+# 162.243.146.0/24
+# 162.243.147.0/24
+# 162.243.149.0/24
+# 162.243.150.0/24
+# 162.243.151.0/24
+# 162.243.157.0/24
+# 162.243.158.0/24
+# 192.241.196.0/24
+add stretchoid 192.241.196.70
+add stretchoid 192.241.196.136
+add stretchoid 192.241.196.212
+add stretchoid 192.241.196.238
+# 192.241.203.0/24
+add stretchoid 192.241.203.6
+add stretchoid 192.241.203.26
+add stretchoid 192.241.203.38
+add stretchoid 192.241.203.44
+add stretchoid 192.241.203.84
+add stretchoid 192.241.203.108
+add stretchoid 192.241.203.119
+add stretchoid 192.241.203.121
+add stretchoid 192.241.203.122
+add stretchoid 192.241.203.127
+add stretchoid 192.241.203.142
+add stretchoid 192.241.203.157
+add stretchoid 192.241.203.165
+add stretchoid 192.241.203.197
+# 192.241.205.0/24
+add stretchoid 192.241.205.27
+add stretchoid 192.241.205.39
+add stretchoid 192.241.205.56
+add stretchoid 192.241.205.86
+add stretchoid 192.241.205.102
+add stretchoid 192.241.205.111
+add stretchoid 192.241.205.143
+add stretchoid 192.241.205.157
+add stretchoid 192.241.205.166
+add stretchoid 192.241.205.171
+add stretchoid 192.241.205.177
+add stretchoid 192.241.205.179
+add stretchoid 192.241.205.181
+add stretchoid 192.241.205.202
+add stretchoid 192.241.205.216
+add stretchoid 192.241.205.219
+add stretchoid 192.241.205.223
+add stretchoid 192.241.205.224
+add stretchoid 192.241.205.227
+add stretchoid 192.241.205.235
+add stretchoid 192.241.205.249
+add stretchoid 192.241.205.251
+# 192.241.208.0/24
+add stretchoid 192.241.208.29
+add stretchoid 192.241.208.46
+add stretchoid 192.241.208.50
+add stretchoid 192.241.208.143
+add stretchoid 192.241.208.196
+add stretchoid 192.241.208.227
+# 192.241.209.0/24
+add stretchoid 192.241.209.10
+add stretchoid 192.241.209.35
+add stretchoid 192.241.209.78
+add stretchoid 192.241.209.91
+add stretchoid 192.241.209.99
+add stretchoid 192.241.209.101
+add stretchoid 192.241.209.120
+add stretchoid 192.241.209.126
+add stretchoid 192.241.209.140
+add stretchoid 192.241.209.148
+add stretchoid 192.241.209.196
+add stretchoid 192.241.209.206
+add stretchoid 192.241.209.208
+add stretchoid 192.241.209.216
+add stretchoid 192.241.209.221
+add stretchoid 192.241.209.229
+add stretchoid 192.241.209.230
+add stretchoid 192.241.209.234
+add stretchoid 192.241.209.237
+add stretchoid 192.241.209.244
+# 192.241.212.0/24
+add stretchoid 192.241.212.24
+add stretchoid 192.241.212.85
+add stretchoid 192.241.212.88
+add stretchoid 192.241.212.93
+add stretchoid 192.241.212.97
+add stretchoid 192.241.212.103
+add stretchoid 192.241.212.111
+add stretchoid 192.241.212.136
+add stretchoid 192.241.212.143
+add stretchoid 192.241.212.154
+add stretchoid 192.241.212.170
+add stretchoid 192.241.212.205
+add stretchoid 192.241.212.219
+add stretchoid 192.241.212.223
+add stretchoid 192.241.212.248
+# 192.241.213.0/24
+add stretchoid 192.241.213.6
+add stretchoid 192.241.213.8
+add stretchoid 192.241.213.16
+add stretchoid 192.241.213.17
+add stretchoid 192.241.213.19
+add stretchoid 192.241.213.20
+add stretchoid 192.241.213.41
+add stretchoid 192.241.213.43
+add stretchoid 192.241.213.46
+add stretchoid 192.241.213.55
+add stretchoid 192.241.213.56
+add stretchoid 192.241.213.57
+add stretchoid 192.241.213.75
+add stretchoid 192.241.213.80
+add stretchoid 192.241.213.87
+add stretchoid 192.241.213.101
+add stretchoid 192.241.213.107
+add stretchoid 192.241.213.128
+add stretchoid 192.241.213.160
+add stretchoid 192.241.213.178
+add stretchoid 192.241.213.181
+add stretchoid 192.241.213.196
+add stretchoid 192.241.213.202
+add stretchoid 192.241.213.213
+add stretchoid 192.241.213.236
+add stretchoid 192.241.213.250
+# 192.241.214.0/24
+add stretchoid 192.241.214.9
+add stretchoid 192.241.214.17
+add stretchoid 192.241.214.18
+add stretchoid 192.241.214.22
+add stretchoid 192.241.214.34
+add stretchoid 192.241.214.35
+add stretchoid 192.241.214.51
+add stretchoid 192.241.214.75
+add stretchoid 192.241.214.88
+add stretchoid 192.241.214.98
+add stretchoid 192.241.214.99
+add stretchoid 192.241.214.108
+add stretchoid 192.241.214.114
+add stretchoid 192.241.214.123
+add stretchoid 192.241.214.129
+add stretchoid 192.241.214.134
+add stretchoid 192.241.214.135
+add stretchoid 192.241.214.143
+add stretchoid 192.241.214.153
+add stretchoid 192.241.214.159
+add stretchoid 192.241.214.162
+add stretchoid 192.241.214.175
+add stretchoid 192.241.214.177
+add stretchoid 192.241.214.189
+add stretchoid 192.241.214.190
+add stretchoid 192.241.214.193
+add stretchoid 192.241.214.204
+add stretchoid 192.241.214.211
+add stretchoid 192.241.214.213
+add stretchoid 192.241.214.222
+add stretchoid 192.241.214.227
+add stretchoid 192.241.214.230
+add stretchoid 192.241.214.251
+# 192.241.215.0/24
+add stretchoid 192.241.215.11
+add stretchoid 192.241.215.32
+add stretchoid 192.241.215.36
+add stretchoid 192.241.215.42
+add stretchoid 192.241.215.47
+add stretchoid 192.241.215.63
+add stretchoid 192.241.215.91
+add stretchoid 192.241.215.92
+add stretchoid 192.241.215.94
+add stretchoid 192.241.215.95
+add stretchoid 192.241.215.118
+add stretchoid 192.241.215.131
+add stretchoid 192.241.215.145
+add stretchoid 192.241.215.155
+add stretchoid 192.241.215.158
+add stretchoid 192.241.215.159
+add stretchoid 192.241.215.161
+add stretchoid 192.241.215.162
+add stretchoid 192.241.215.169
+add stretchoid 192.241.215.172
+add stretchoid 192.241.215.173
+add stretchoid 192.241.215.174
+add stretchoid 192.241.215.188
+add stretchoid 192.241.215.189
+add stretchoid 192.241.215.222
+add stretchoid 192.241.215.225
+add stretchoid 192.241.215.230
+add stretchoid 192.241.215.237
+# 192.241.216.0/24
+add stretchoid 192.241.216.4
+add stretchoid 192.241.216.7
+add stretchoid 192.241.216.19
+add stretchoid 192.241.216.29
+add stretchoid 192.241.216.39
+add stretchoid 192.241.216.41
+add stretchoid 192.241.216.44
+add stretchoid 192.241.216.62
+add stretchoid 192.241.216.65
+add stretchoid 192.241.216.90
+add stretchoid 192.241.216.122
+add stretchoid 192.241.216.129
+add stretchoid 192.241.216.133
+add stretchoid 192.241.216.138
+add stretchoid 192.241.216.144
+add stretchoid 192.241.216.207
+add stretchoid 192.241.216.210
+add stretchoid 192.241.216.212
+add stretchoid 192.241.216.229
+add stretchoid 192.241.216.235
+# 192.241.218.0/24
+add stretchoid 192.241.218.38
+add stretchoid 192.241.218.40
+add stretchoid 192.241.218.42
+add stretchoid 192.241.218.49
+add stretchoid 192.241.218.52
+add stretchoid 192.241.218.58
+add stretchoid 192.241.218.64
+add stretchoid 192.241.218.74
+add stretchoid 192.241.218.95
+add stretchoid 192.241.218.97
+add stretchoid 192.241.218.100
+add stretchoid 192.241.218.105
+add stretchoid 192.241.218.109
+add stretchoid 192.241.218.119
+add stretchoid 192.241.218.125
+add stretchoid 192.241.218.135
+add stretchoid 192.241.218.186
+add stretchoid 192.241.218.190
+add stretchoid 192.241.218.229
+add stretchoid 192.241.218.248
+# 192.241.220.0/24
+add stretchoid 192.241.220.4
+add stretchoid 192.241.220.15
+add stretchoid 192.241.220.25
+add stretchoid 192.241.220.29
+add stretchoid 192.241.220.33
+add stretchoid 192.241.220.36
+add stretchoid 192.241.220.39
+add stretchoid 192.241.220.40
+add stretchoid 192.241.220.48
+add stretchoid 192.241.220.52
+add stretchoid 192.241.220.59
+add stretchoid 192.241.220.64
+add stretchoid 192.241.220.73
+add stretchoid 192.241.220.88
+add stretchoid 192.241.220.96
+add stretchoid 192.241.220.107
+add stretchoid 192.241.220.119
+add stretchoid 192.241.220.121
+add stretchoid 192.241.220.132
+add stretchoid 192.241.220.134
+add stretchoid 192.241.220.135
+add stretchoid 192.241.220.137
+add stretchoid 192.241.220.151
+add stretchoid 192.241.220.158
+add stretchoid 192.241.220.171
+add stretchoid 192.241.220.174
+add stretchoid 192.241.220.188
+add stretchoid 192.241.220.203
+add stretchoid 192.241.220.209
+add stretchoid 192.241.220.219
+add stretchoid 192.241.220.232
+add stretchoid 192.241.220.236
+add stretchoid 192.241.220.245
+# 192.241.221.0/24
+add stretchoid 192.241.221.29
+add stretchoid 192.241.221.44
+add stretchoid 192.241.221.72
+add stretchoid 192.241.221.73
+add stretchoid 192.241.221.76
+add stretchoid 192.241.221.77
+add stretchoid 192.241.221.80
+add stretchoid 192.241.221.93
+add stretchoid 192.241.221.98
+add stretchoid 192.241.221.103
+add stretchoid 192.241.221.104
+add stretchoid 192.241.221.112
+add stretchoid 192.241.221.126
+add stretchoid 192.241.221.137
+add stretchoid 192.241.221.139
+add stretchoid 192.241.221.148
+add stretchoid 192.241.221.149
+add stretchoid 192.241.221.150
+add stretchoid 192.241.221.162
+add stretchoid 192.241.221.168
+add stretchoid 192.241.221.169
+add stretchoid 192.241.221.186
+add stretchoid 192.241.221.191
+add stretchoid 192.241.221.195
+add stretchoid 192.241.221.196
+add stretchoid 192.241.221.215
+add stretchoid 192.241.221.219
+add stretchoid 192.241.221.222
+add stretchoid 192.241.221.224
+add stretchoid 192.241.221.236
+add stretchoid 192.241.221.237
+add stretchoid 192.241.221.238
+add stretchoid 192.241.221.239
+add stretchoid 192.241.221.243
+add stretchoid 192.241.221.249
+# 192.241.222.0/24
+add stretchoid 192.241.222.7
+add stretchoid 192.241.222.26
+add stretchoid 192.241.222.30
+add stretchoid 192.241.222.33
+add stretchoid 192.241.222.34
+add stretchoid 192.241.222.45
+add stretchoid 192.241.222.48
+add stretchoid 192.241.222.63
+add stretchoid 192.241.222.67
+add stretchoid 192.241.222.69
+add stretchoid 192.241.222.73
+add stretchoid 192.241.222.84
+add stretchoid 192.241.222.90
+add stretchoid 192.241.222.91
+add stretchoid 192.241.222.102
+add stretchoid 192.241.222.105
+add stretchoid 192.241.222.108
+add stretchoid 192.241.222.109
+add stretchoid 192.241.222.110
+add stretchoid 192.241.222.114
+add stretchoid 192.241.222.116
+add stretchoid 192.241.222.117
+add stretchoid 192.241.222.118
+add stretchoid 192.241.222.124
+add stretchoid 192.241.222.127
+add stretchoid 192.241.222.130
+add stretchoid 192.241.222.132
+add stretchoid 192.241.222.133
+add stretchoid 192.241.222.134
+add stretchoid 192.241.222.140
+add stretchoid 192.241.222.142
+add stretchoid 192.241.222.147
+add stretchoid 192.241.222.149
+add stretchoid 192.241.222.150
+add stretchoid 192.241.222.154
+add stretchoid 192.241.222.157
+add stretchoid 192.241.222.158
+add stretchoid 192.241.222.162
+add stretchoid 192.241.222.163
+add stretchoid 192.241.222.168
+add stretchoid 192.241.222.172
+add stretchoid 192.241.222.174
+add stretchoid 192.241.222.177
+add stretchoid 192.241.222.186
+add stretchoid 192.241.222.191
+add stretchoid 192.241.222.195
+add stretchoid 192.241.222.207
+add stretchoid 192.241.222.214
+add stretchoid 192.241.222.224
+add stretchoid 192.241.222.227
+add stretchoid 192.241.222.232
+add stretchoid 192.241.222.233
+add stretchoid 192.241.222.234
+add stretchoid 192.241.222.236
+add stretchoid 192.241.222.239
+add stretchoid 192.241.222.241
+add stretchoid 192.241.222.247
+add stretchoid 192.241.222.248
+add stretchoid 192.241.222.251
+# 192.241.223.0/24
+add stretchoid 192.241.223.11
+add stretchoid 192.241.223.13
+add stretchoid 192.241.223.18
+add stretchoid 192.241.223.21
+add stretchoid 192.241.223.25
+add stretchoid 192.241.223.27
+add stretchoid 192.241.223.31
+add stretchoid 192.241.223.35
+add stretchoid 192.241.223.39
+add stretchoid 192.241.223.42
+add stretchoid 192.241.223.44
+add stretchoid 192.241.223.47
+add stretchoid 192.241.223.49
+add stretchoid 192.241.223.55
+add stretchoid 192.241.223.60
+add stretchoid 192.241.223.63
+add stretchoid 192.241.223.64
+add stretchoid 192.241.223.66
+add stretchoid 192.241.223.68
+add stretchoid 192.241.223.74
+add stretchoid 192.241.223.78
+add stretchoid 192.241.223.93
+add stretchoid 192.241.223.94
+add stretchoid 192.241.223.100
+add stretchoid 192.241.223.105
+add stretchoid 192.241.223.109
+add stretchoid 192.241.223.115
+add stretchoid 192.241.223.118
+add stretchoid 192.241.223.119
+add stretchoid 192.241.223.123
+add stretchoid 192.241.223.129
+add stretchoid 192.241.223.131
+add stretchoid 192.241.223.132
+add stretchoid 192.241.223.135
+add stretchoid 192.241.223.136
+add stretchoid 192.241.223.138
+add stretchoid 192.241.223.141
+add stretchoid 192.241.223.142
+add stretchoid 192.241.223.145
+add stretchoid 192.241.223.149
+add stretchoid 192.241.223.150
+add stretchoid 192.241.223.152
+add stretchoid 192.241.223.156
+add stretchoid 192.241.223.158
+add stretchoid 192.241.223.159
+add stretchoid 192.241.223.163
+add stretchoid 192.241.223.165
+add stretchoid 192.241.223.168
+add stretchoid 192.241.223.177
+add stretchoid 192.241.223.178
+add stretchoid 192.241.223.179
+add stretchoid 192.241.223.182
+add stretchoid 192.241.223.184
+add stretchoid 192.241.223.185
+add stretchoid 192.241.223.187
+add stretchoid 192.241.223.188
+add stretchoid 192.241.223.189
+add stretchoid 192.241.223.191
+add stretchoid 192.241.223.193
+add stretchoid 192.241.223.208
+add stretchoid 192.241.223.209
+add stretchoid 192.241.223.210
+add stretchoid 192.241.223.211
+add stretchoid 192.241.223.212
+add stretchoid 192.241.223.216
+add stretchoid 192.241.223.226
+add stretchoid 192.241.223.228
+add stretchoid 192.241.223.229
+add stretchoid 192.241.223.230
+add stretchoid 192.241.223.231
+add stretchoid 192.241.223.232
+add stretchoid 192.241.223.234
+add stretchoid 192.241.223.235
+add stretchoid 192.241.223.236
+add stretchoid 192.241.223.237
+add stretchoid 192.241.223.238
+add stretchoid 192.241.223.243
+add stretchoid 192.241.223.249
+add stretchoid 192.241.223.250
+# 192.241.226.0/24
+# 192.241.227.0/24
+# 192.241.228.0/24
+# 192.241.230.0/24
+# 192.241.231.0/24
+# 192.241.232.0/24
+# 192.241.233.0/24
+# 192.241.234.0/24
+# 192.241.235.0/24
+# 192.241.236.0/24
+add stretchoid 192.241.236.137
+# 192.241.237.0/24
+# 192.241.238.0/24
+# 192.241.239.0/24
+# 192.243.128.0/24
+# 198.199.104.0/24
+add stretchoid 198.199.104.73
+# 198.199.105.0/24
+# 198.199.106.0/24
+# 198.199.107.0/24

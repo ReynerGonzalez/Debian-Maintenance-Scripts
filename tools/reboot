@@ -1,0 +1,91 @@
+#!/bin/bash
+#
+# Safe reboot.
+#
+# VERSION       :0.6.1
+# DATE          :2019-08-24
+# AUTHOR        :Viktor Szépe <viktor@szepe.net>
+# URL           :https://github.com/szepeviktor/debian-server-tools
+# LICENSE       :The MIT License (MIT)
+# BASH-VERSION  :4.2+
+# DEPENDS       :apt-get install grub-pc psmisc
+# LOCATION      :/usr/local/sbin/reboot
+
+# Usage
+#
+#     REBOOT=1 reboot
+
+GRUB_CONFIG="/boot/grub/grub.cfg"
+
+if [ "$REBOOT" != 1 ]; then
+    echo "Try  REBOOT=1 reboot ${*}" 1>&2
+    exit 100
+fi
+
+if [ -f /extlinux.conf ] && [ -f /ldlinux.sys ]; then
+    # Extlinux
+    # shellcheck disable=SC2016
+    FIRST_ROOT="$(sed -n -e '0,/^append /s/^.*\sroot=\(\S\+\).*$/\1/p' /extlinux.conf)"
+else
+    # GRUB
+    # shellcheck disable=SC2016
+    FIRST_ROOT="$(sed -n -e '/^menuentry/,${s/^\s*linux\b.*root=\(\S\+\).*$/\1/p;/^}/q}' "$GRUB_CONFIG")"
+fi
+
+DISK=""
+
+case "${FIRST_ROOT:0:5}" in
+    "/dev/")
+        # Find block device by name
+        DISK="$(realpath --canonicalize-existing "$FIRST_ROOT")"
+        ;;
+    "UUID=")
+        # Find disk by UUID
+        DISK="$(realpath --canonicalize-existing "/dev/disk/by-uuid/${FIRST_ROOT#UUID=}")"
+        ;;
+    *)
+        echo "Root device not found (${FIRST_ROOT})" 1>&2
+        exit 1
+        ;;
+esac
+
+MOUNTED="$DISK"
+
+# Disk and mounted device may differ on LVM
+if [ "${FIRST_ROOT:0:12}" == /dev/mapper/ ] && grep -q "^${FIRST_ROOT} / " /proc/mounts; then
+    MOUNTED="$FIRST_ROOT"
+fi
+
+# Check mounted block device
+if [ ! -b "$DISK" ] || ! grep -q "^${MOUNTED}\\s" /proc/mounts; then
+    echo "Root device is not a block device or not mounted (${FIRST_ROOT})" 1>&2
+    exit 2
+fi
+
+# Stop monit
+clear
+if [ "$(dpkg-query --showformat='${Status}' --show monit 2>/dev/null)" == "install ok installed" ]; then
+    if service monit status | grep -q -F 'monit is running'; then
+        service monit stop
+    fi
+fi
+
+# Stop cron
+if service cron status | grep -q -F 'cron is running'; then
+    service cron stop
+fi
+
+# Start the reboot process
+/sbin/reboot "$@" &
+
+# Follow syslog for 8 seconds
+timeout 8 tail -f /var/log/syslog
+
+# Watch processes exit
+while true; do
+    clear
+    date -R
+    pstree
+
+    sleep 0.5
+done

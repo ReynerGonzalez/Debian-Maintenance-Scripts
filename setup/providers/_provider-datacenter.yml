@@ -1,0 +1,71 @@
+# Provider in DataCenter
+hosting-company: #Provider
+virtualization: kvm
+#virtualization: vmware
+#virtualization: xen
+#virtualization: hyperv
+#virtualization: openvz
+#virtualization: baremetal
+#virtualization: hypervisor
+networking:
+    #method: dhcp
+    method: static
+    name: eth0
+    ipv4: #1.2.3.4
+    netmask: 255.255.255.0
+    gateway: #1.2.3.254
+    resolver:
+        # See /tools/dnsall.sh
+        - $local.NS1
+        # DNS Advantage by Neustar
+        # rdns1.ultradns.net. + no NXDomain redirect
+        - 156.154.70.5
+        # rdns2.ultradns.net. + no NXDomain redirect
+        #- 156.154.71.5
+        # Cloudflare DNS
+        # 1dot1dot1dot1.cloudflare-dns.com.
+        #- 1.1.1.1
+        #- 1.0.0.1
+        #- 2606:4700:4700::1111
+        #- 2606:4700:4700::1001
+        # DNS.WATCH by Ideal-Hosting
+        # resolver1.dns.watch
+        #- 84.200.69.80
+        #- 2001:1608:10:25::1c04:b12f
+        # resolver2.dns.watch
+        #- 84.200.70.40
+        #- 2001:1608:10:25::9249:d69b
+        # MAXNS=3
+        #- $local.NS2
+    inet6:
+        #method: auto
+        method: static
+        name: eth0
+        ipv6: #2a00:3055:1000:900:8000:e2ff:feee:aeef
+        resolver:
+            - #2a00:3055:1000:900:1
+    # Second interface
+    eth1:
+        method: static
+        name: eth1
+        ipv4: #10.0.0.103
+        netmask: 255.255.255.0
+        gateway: #10.0.0.255
+software:
+    ovhrc: "Instance data in /etc/ovhrc"
+    serclient-deb: "Aruba ExtraControl"
+documentation:
+    - http://help.ovh.com/InstallOvhKey
+    - http://help.ovh.com/RealTimeMonitoring
+ntp-server: ntp.provider.net
+cloud-init:
+    # /etc/cloud/cloud.cfg.d/90_dpkg.cfg
+    datasource_list: [ NoCloud, AltCloud, ConfigDrive, Ec2, MAAS, OVF, GCE, None ]
+provider-package:
+    # Soft restart needs
+    - acpid
+    # Provides VirtIO RNG
+    - rng-tools
+    # For HyperV
+    - hyperv-demons
+#auto-check-system: true

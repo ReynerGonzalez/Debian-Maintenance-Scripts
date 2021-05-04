@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e -x
+
+# http://git.annexia.org/?p=virt-what.git;a=summary
+virt-what > /root/virt-what.log
+apt-get purge -qq virt-what

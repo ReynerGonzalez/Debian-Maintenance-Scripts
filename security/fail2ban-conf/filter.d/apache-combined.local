@@ -1,0 +1,37 @@
+# Fail2Ban filter for low priority HTTP attacks (maxretry = 6)
+
+# INCLUDES setion is necessary: there is no apache-combined.conf
+[INCLUDES]
+
+before = apache-common.conf
+
+[Definition]
+
+#     https://wiki.apache.org/httpd/ListOfErrors
+
+#           apache-auth.conf
+#               apache-noscript.conf
+#           waf4wordpress (proxy_fcgi)
+#               WordPress theme, plugin direct access (proxy_fcgi)
+#           non-existent PHP file
+failregex = ^%(_apache_error_client)s (AH(01797|01630): )?client denied by server configuration: (uri )?\S*(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH01617: )?user .*? authentication failure for "\S*": Password Mismatch(, referer: \S+)?$
+            ^%(_apache_error_client)s (AH01618: )?user .*? not found(: )?\S*(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH01614: )?client used wrong authentication scheme: \S*(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH\d+: )?Authorization of user \S+ to access \S* failed, reason: .*$
+            ^%(_apache_error_client)s (AH0179[24]: )?(Digest: )?user .*?: password mismatch: \S*(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH0179[01]: |Digest: )user `.*?' in realm `.+' (not found|denied by provider): \S*(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH01631: )?user .*?: authorization failure for "\S*":(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH01775: )?(Digest: )?invalid nonce .* received - length is not \S+(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH01788: )?(Digest: )?realm mismatch - got `.*?' but expected `.+'(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH01789: )?(Digest: )?unknown algorithm `.*?' received: \S*(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH01793: )?invalid qop `.*?' received: \S*(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s (AH01777: )?(Digest: )?invalid nonce .*? received - user attempted time travel(, referer: \S+)?\s*$
+                ^%(_apache_error_client)s ((AH001(28|30): )?File does not exist|(AH01264: )?script not found or unable to stat): /\S*(php([45]|[.-]cgi)?|\.asp|\.exe|\.pl)(, referer: \S+)?\s*$
+                ^%(_apache_error_client)s script '/\S*(php([45]|[.-]cgi)?|\.asp|\.exe|\.pl)\S*' not found or unable to stat(, referer: \S+)?\s*$
+            ^%(_apache_error_client)s AH01071: Got error '(PHP message: )?(Malicious traffic detected|File does not exist): .*(, referer: \S+)?\s*$
+                ^%(_apache_error_client)s AH01071: Got error '(PHP message: )?(PHP Fatal error:)?  Call to undefined function \S+\(\) in /\S+/(themes|plugins)/\S+/\S+\.php on line [0-9]+$
+            ^%(_apache_error_client)s AH01071: Got error 'Primary script unknown\\n'$
+ignoreregex = 
+
+# Author: Viktor Szépe

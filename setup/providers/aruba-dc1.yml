@@ -1,0 +1,36 @@
+# DC1 in Arezzo, Italy
+hosting-company: Aruba
+virtualization: vmware
+networking:
+    method: static
+    name: eth0
+    resolver:
+        - 62.149.128.4
+        - 8.8.8.8
+        - 62.149.132.4
+software:
+    aruba-arping: "Fix duplicate IP problem"
+    serclient: "Aruba ExtraControl, Request an activation & Restart & Enter the token"
+    monit: "Cloud instances have two routers, use 1.2.3.{4,5} in monit/01-system/network_hop"
+provider-package:
+    # Used in aruba-arping
+    - arping
+    # Aruba ExtraControl (serclient)
+    # Available from szepeviktor/aruba-serclient.deb repo
+    #     http://admin.dc3.arubacloud.hu/Manage/Serial/SerialManagement.aspx
+    #     https://github.com/pmcloud/ExtraControl
+    #
+    # Activation
+    # - Request ExtraControl activation
+    #     https://admin.dc3.arubacloud.hu/Manage/Serial/SerialActivation.aspx
+    # - "Switch off" the server
+    # - "Switch on" the server
+    # - Enter token
+    #
+    # Package contains
+    # - Set log level
+    # - Comment out custom logrotate
+    # - Add logrotate configuration
+    # - Fix lintian errors
+    - aruba-serclient
+auto-check-system: true

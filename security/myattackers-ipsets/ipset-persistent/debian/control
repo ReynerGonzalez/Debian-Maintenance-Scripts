@@ -1,0 +1,12 @@
+Source: ipset-persistent
+Section: net
+Priority: optional
+Maintainer: Viktor Szépe <viktor@szepe.net>
+Standards-Version: 4.1.0
+Build-Depends: debhelper (>= 9.2)
+
+Package: ipset-persistent
+Architecture: all
+Depends: ${misc:Depends}, ipset, netfilter-persistent
+Description: IP set plugin for netfilter-persistent
+ Originally by @jordanrinke

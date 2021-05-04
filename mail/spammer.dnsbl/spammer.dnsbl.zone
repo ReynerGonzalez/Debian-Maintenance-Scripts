@@ -1,0 +1,536 @@
+#
+# Spammer rbldns zone file
+#
+#### DOMAIN        :spammer.dnsbl
+#### DOCS          :http://www.corpit.ru/mjt/rbldnsd.html
+#### DUMP          :rbldnsd -d -r/var/lib/rbldns/spammer spammer.dnsbl:ip4set:spammer.dnsbl.zone > /dev/null
+#### TEST          :host -t ANY $(revip 1.2.3.4).spammer.dnsbl worker.szepe.net
+#### LOCATION      :/var/lib/rbldns/spammer/spammer.dnsbl.zone
+
+####  1   - Spammer
+####  2   - Neighbour
+####  255 - Excluded
+
+#### http://spamlap.hu/archive_month/index.html
+#### http://dnsbl.aspnet.hu/About.aspx
+#### https://www.spamhaus.org/news/article/646/announcing-the-spamhaus-css
+
+$NS 3600 worker.szepe.net
+# One minute TTL
+$TTL 60
+
+# ---------------------------------------
+
+# SPAMMERS
+:127.0.0.1:Is a spammer
+
+# Single hosts
+23.88.228.135    HU_mail.onlinestoresample.info @ENZUINC/AS18978
+23.238.16.159    HU_smartingatlan.info @HOSTWINDS-17-5/AS54290
+23.238.56.218    HU_Laszlo Nagypal/ujfej.com @HOSTWINDS-17-5/AS54290
+79.172.239.117   HU_server1.bestofmarket.hu @TARHELYEU-NET/AS29278
+82.165.194.195   DE_ns2.ilovebroadband.net @SCHLUND-CUSTOMERS/AS8560
+149.154.152.242  HU_lttclub.org @EDIS-GMBH/AS3549
+162.220.12.113   HU_mail.webaruhaz-pelda.info @CRISSIC/AS62639
+178.238.222.94   HU_server2.bestofmarket.hu @FREEMIUM-NET/AS29278
+198.143.96.181   HU_arctic.gytcre.com @HOSTWINDS-17-5/AS54290
+199.59.62.53     HU_aback.gytcre.com @HOSTWINDS-17-5/AS54290
+212.83.143.177   HU_arousal.topaddlinkdir.com @ONLINE-SAS/AS12876
+85.25.37.53      HU_gruppi.hu @DE-HEG-MASS
+# greencoffeeplus.hu
+139.59.160.145   HU_msrvrone.com @DIGITALOCEAN-AP/AS202109
+# Infoline Register Kft. by LINUXHUNGARY
+87.229.55.137    :1:HU_w3.linuxhungary.com @DENINET
+# belcher.dustin@mail.ru
+89.163.212.18    HU_mail.mtsbu.us @myLoc/AS24961
+
+# "Égitest" spammer
+#45.55.139.58     HU_aranyhold.tk @DIGITALOCEAN
+#46.101.59.151    HU_holdhegy.tk @EU-DIGITALOCEAN-L1/AS202109
+46.101.111.242   HU_faag.cf @EU-DIGITALOCEAN-L1
+#104.131.94.207   HU_aranyfo.ml @DIGITALOCEAN
+104.131.168.42   HU_kisujj.cf @DIGITALOCEAN-9
+139.59.165.61    HU_holdviz.ml @DIGITALOCEAN
+159.203.41.248   HU_ujviz.ga @DIGITALOCEAN
+#178.62.48.185    HU_ezustnap.ga @DIGITALOCEAN-LON-1
+
+# CHINANET-HE
+111.224.250      CN_CHINANET-HE/AS4134
+# CHINANET-JX
+117.41           CN_CHINANET-JX/AS4134
+
+# SYSTECH Global DC: Invitel
+91.82.84-85      :2:Neighbour of smtp*.mindenalove.hu/*.nyuszikaaaaa.hu
+91.82.84.143-152 HU_smtp*.mindenalove.hu @SYSTECH-GLOBAL/AS12301
+91.82.84.203-204 HU_vps.*-ad.com @SYSTECH-GLOBAL/AS12301
+91.82.85.85-99   HU_*.nyuszikaaaaa.hu @SYSTECH-GLOBAL/AS12301
+91.82.85.139-140 HU_*.egyediajanlat.hu @SYSTECH-GLOBAL/AS12301
+
+# Pénzáramlás DC: Invitel
+#91.82.226        :2:Neighbour of *.smtp.hu
+91.82.226.172    HU_penzaramlas.smtp.hu @Invitel-pool/AS12301
+
+# smtp*.topszallasok.hu, smtp.wellness4youmail.hu DC: Invitel
+91.83.236         :2:Neighbour of topszallasok
+91.83.236.239-250 HU_smtp*.topszallasok.hu @Invitel/AS12301
+91.83.93          :2:Neighbour of topszallasok
+91.83.93.127-137  HU_relocate:smtp*.topszallasok.hu @Invitel/AS12301
+
+# Hostkey / Mir Telematiki
+5.39.216.0/21    RU_HOSTKEY-NET/AS57043
+46.17.96.0/21    RU_Kryptos-Net/AS57043
+91.218.112-115   RU_BERMOSCOM-NET/AS49335
+146.0.72.0/21    RU_HOSTKEY-NET/AS57043
+158.255.0-7      RU_RU-HOSTKEY-20111114/AS49335
+193.109.68.0/23  RU_NCONNECT-NET/AS57043
+195.162.68.0/23  RU_NCONNECT-NET/AS57043
+
+# root.lu
+94.242.210       LU_LU-ROOT/AS5577
+188.42.252-254   :2:Neighbour of root.lu
+188.42.255       LU_WZSG-1 @Singapure/AS45470
+
+# Tigernet Kft - Tigrishalál: 2015.03.03.
+#194.165.26-27    HU_TigerNet
+#193.9.29-31      HU_TigerNet/AS47381
+
+# Iliad (Online SAS, Dedibox servers)
+195.154             :2:Neighbour of FR-ILIAD-ENTREPRISES-CUSTOMERS
+195.154.40          FR_FR-ILIAD-ENTREPRISES-CUSTOMERS/AS12876
+195.154.40.119      :255:excluded_support.2bhosted.eu._Snel.com
+62.4.15             :2:Neighbour of *.hoverstyle.com.
+62.4.15.221         FR_*.hoverstyle.com. @DEDIBOX-POOL-IPFO/AS12876
+212.129.32.0/19     :2:Neighbour of *.nyshkickball.com.
+212.129.55.1        FR_gutter.nyshkickball.com. @FR-ILIAD-ENTREPRISES-CUSTOMERS/AS12876
+212.129.59.1        FR_friendly-vibes.com. @FR-ILIAD-ENTREPRISES-CUSTOMERS/AS12876
+163.172.133         :2:Neighbour of mailetor.xyz
+163.172.133.242     FR_mailetor.xyz @ONLINE_NET_DEDICATED_SERVERS/AS12876
+163.172.164.241     magyar FR_duozit.com @ONLINE_NET_DEDICATED_SERVERS/AS12876
+
+# Peter Krozser
+198.20.102.32/28    HU_server.freekout6.info/Peter Krozser @SINGLEHOP-BV/AS32475
+
+# Electris Ltd
+83.143.176-183      :2:Neighbour of Electris Ltd
+83.143.178.104      BG_brandsvirals.net. @IXTLAN-SYSTEMS/AS200002
+
+# ROAD MARKETING SRL
+86.106.89.0/24     RO_only-mta-s @ROAD-MARKETING-SRL/AS48336
+37.156.226.0/24     RO_nagyonhasznos.eu-valamihasznosat.eu. @ROAD-MARKETING-SRL/AS59854
+
+# m*.cutersfood.com
+199.217.114.69-73   HU_m*.cutersfood.com @HSI-6/AS30083
+
+# Flipora forced signup
+#74.86.42.161-169    US_mail*.flipmailer.com @SOFTLAYER-74.86.32.0/AS36351
+
+# Black Fox Limited @VolumeDrive
+107.182.16.0/20     :2:Neighbour of Black Fox Limited
+107.182.16.0/26     US_*.getlatestnews.biz. @BFL-22/AS46664
+107.182.17.198-208  US_*.getlatestnews.biz. @BFL-22/AS46664
+
+# *.globalplaza.hu
+188.227.227.0/24    :2:Neighbour of HU_*.globalplaza.hu
+188.227.227.181-186 HU_*.globalplaza.hu. @DOCLERWEB/AS47381
+
+# euve77344.serverprofi24.net @PlusServer AG
+62.75.142.0/24      :2:Neighbour of HU_euve77344.serverprofi24.net.
+62.75.142.67        HU_euve77344.serverprofi24.net. @BSB-SERVICE-1/AS8972
+
+# *news.info spammer block DC: SERVERDROID
+94.46.192-195       :2: Neighbour of mail.*news.info. spammer block
+94.46.193.222-255   GB_mail.sacernews.info,mail.mowingnews.info...mail.baileynews.info @US-SERVERDROID-20080603/AS24598
+91.109.112.0/21     :2: Neighbour of *news.info. spammer block
+91.109.119.199-255  GB_pebblynews.info,aidanews.info...currynews.info @US-SERVERDROID-20120619/AS24598
+185.109.169.1-148   :2: Neighbour of mail.*news.info. spammer block
+185.109.169.171-255 :2: Neighbour of mail.*news.info. spammer block
+185.109.169.149-170 GB_mail.mossesnews.info...mail.wrestlenews.info @US-SERVERDROID-20150716/AS24598
+
+# VPSOPENVZ SRL-D / Oancea-F-Cristian-Marius-PFA, TENNET TELECOM SRL mail.*news.info. mail.*news.xyz.
+89.33.192.0/22      RO_m.*news.info.,fmx.*news.xyz.,fmx.*news.pro. @VPSOPENVZ/AS61412
+93.119.104.0/22     RO_mail.katinanews.info. @VPSOPENVZ/AS61412
+188.240.221.0/24    RO_m.tunatebiz.info. @VPSOPENVZ/AS61412
+
+# spammer: 93.158.206.23 DC: Serverius
+93.158.204.0/22     :2: Neighbour of intensdesign.com. @Serverius/AS50673
+
+# HUMANICWEB @High Speed Web/Genesis 2 Networks
+# *.offersserve.xyz *.sendmasspress.xyz *.sendmasscampaign.xyz *.sendbulkcampaign.xyz
+216.189.122.0/24    :2:Neighbour of HUMANICWEB *.send*.xyz.
+216.189.122.193     US_ptp193.sendbulkcampaign.xyz. @HIGHSPEEDWEB-2/AS8175
+
+# GLOBAL-FRAG-SERVERS
+23.247.114.0/24     :2:Neighbour of GLOBAL-FRAG-SERVERS shop*.360jiank.com.
+23.247.114.60       US_shop60.360jiank.com. @GLOBAL-FRAG-SERVERS/AS46573
+
+# Forex Binary Trader binarytrader.trade forexoptions.trade fxbinary.club fxbinaryrevenue.com
+146.0.232.0/26      DE_*fxbinary* @VELIANET-DE-KELLYSHARMA/AS29066
+
+# QuadraNet customers: Legendary Tech Enterprises, Ping4Support, Reliablehosting.com, Legendary Tech Enterprises
+198.55.116.0/22     US_*xx.win. @QUADRANET/AS8100
+
+# EAN NUM LOG Kft./IT Provider Kft. @EZIT
+185.140.108.0/22    HU_EAN-NUM-LOG/AS48131/AS48662
+
+# El Valor Kft. @SZERVERPLEX
+#79.172.210.0/24     :2:Neighbour of El Valor, Famillio
+79.172.210.208-215  HU_*.smartlead.hu @SZERVERPLEX/AS61998
+# Famillio Kft.
+79.172.210.223      HU_relay-gmail.famedia.hu @SZERVERPLEX/AS61998
+
+# MarketMix Reklámiroda Bt. by Webmuhely @Magyar Telekom
+195.228.247.20      HU_marketmix_*.webmuhely.hu. @MT-HOSTING/AS5483
+195.228.247.25      HU_marketmix_*.webmuhely.hu. @MT-HOSTING/AS5483
+79.143.189.215      HU_hirlev-smtp.webmuhely.hu.
+92.222.29.197       HU_ns2.webmuhely.hu.
+
+# *.cegorszag.hu. DC: InterWare
+195.70.59.160       HU_cegorszag.hu @IW-1212TELEKOM-NET/AS8358
+195.70.59.161       HU_cegorszag.hu @IW-1212TELEKOM-NET/AS8358
+
+# *.newstoinbox-mail.eu
+5.56.23.0/24        :2:Neighbour of *.newstoinbox-mail.eu
+5.56.23.88          magyar DE_*.newstoinbox-mail.eu @CORE-BACKBONE/AS33891
+
+# *.mindenaneten.hu
+156.67.106.0/24     HU_mindenaneten @TRAFFIC DEAL/AS197226
+
+# Blue-Cloud Hosting services
+77.241.194.0/24     LT_info*.tk/.cf @Blue-Cloud/AS15440
+77.241.198.0/24     LT_info*.tk/.cf @Blue-Cloud/AS15440
+
+# Quasi Networks LTD. SC-QUASI{1..80}
+#80.82.64.0/22       SC_QUASI* @QUASINETWORKS/AS29073
+#80.82.69.0/24       SC_QUASI* @QUASINETWORKS/AS29073
+#80.82.70.0/24       SC_QUASI* @QUASINETWORKS/AS29073
+#80.82.76.0/22       SC_QUASI* @QUASINETWORKS/AS29073
+#89.248.160.0/20     SC_QUASI* @QUASINETWORKS/AS29073
+#93.174.88.0/21      SC_QUASI* @QUASINETWORKS/AS29073
+#94.102.48.0/20      SC_QUASI* @QUASINETWORKS/AS29073
+
+# Szűcs Károly @Blue Gravity
+64.57.90.64/27      HU_sikerweboldal @Omnis/AS19237
+66.37.0.96/27       HU_sikerweboldal @Omnis/AS19237
+66.37.8.168/29      HU_sikerweboldal @Omnis/AS19237
+66.37.19.128/27     HU_sikerweboldal @Omnis/AS19237
+
+# simpletrendz.com @Shock Hosting
+144.208.126.0/24    :2:Neighbour of simpletrendz
+144.208.126.156/30  ID_simpletrendz @Shock Hosting/AS395092
+
+# Francis de Lasalle trading as Heymman Servers
+# https://bgp.he.net/search?search%5Bsearch%5D=HEYMMAN&commit=Search
+142.147.96.0/22     US_HEYMMAN/AS19969
+172.96.8.0/22       US_HEYMMAN/AS19969
+172.96.12.0/23      US_HEYMMAN/AS19969
+172.96.15.0/24      US_HEYMMAN/AS19969
+# 172.96.14.0/24
+185.191.228.0/22    US_HEYMMAN/AS174
+185.199.224.0/22    US_HEYMMAN/AS174
+185.202.172.0/22    US_HEYMMAN/AS174
+185.215.148.0/22    US_HEYMMAN/AS174
+185.218.232.0/22    US_HEYMMAN/AS174
+# 185.229.240.0/22
+# 185.235.12.0/23
+# 185.235.14.0/24
+# 193.39.184.0/22
+# 212.162.148.0/22
+# NOVUM-IMPORT "Content Delivery Network, Boundary line team"
+212.162.150.0/24    US_HEYMMAN/AS174
+204.10.160.0/22     US_HEYMMAN/AS32097
+
+# thesuperaffiliatenetwork.com - edc* @OVH
+# cnet $EDC_IP | grep edc | cut -d. -f1-4 | xargs -n1 revip
+37.59.130.129-133   edc* @OVH/AS16276
+54.36.17.224        edc* @OVH/AS16276
+54.36.17.226        edc* @OVH/AS16276
+54.36.17.227        edc* @OVH/AS16276
+54.36.17.228        edc* @OVH/AS16276
+54.36.17.230-238    edc* @OVH/AS16276
+54.36.29.64-123     edc* @OVH/AS16276
+66.70.169.34-36     edc* @OVH/AS16276
+66.70.169.38        edc* @OVH/AS16276
+66.70.169.39        edc* @OVH/AS16276
+66.70.169.45        edc* @OVH/AS16276
+66.70.169.46        edc* @OVH/AS16276
+66.70.169.51        edc* @OVH/AS16276
+66.70.169.58        edc* @OVH/AS16276
+66.70.169.62        edc* @OVH/AS16276
+66.70.169.243       edc* @OVH/AS16276
+66.70.169.245       edc* @OVH/AS16276
+66.70.169.250       edc* @OVH/AS16276
+66.70.193.237       edc* @OVH/AS16276
+66.70.224.132-141   edc* @OVH/AS16276
+66.70.227.15-24     edc* @OVH/AS16276
+66.70.227.236       edc* @OVH/AS16276
+66.70.230.54        edc* @OVH/AS16276
+66.70.233.127-131   edc* @OVH/AS16276
+66.70.249.53-62     edc* @OVH/AS16276
+137.74.56.131-135   edc* @OVH/AS16276
+137.74.56.137       edc* @OVH/AS16276
+137.74.56.138       edc* @OVH/AS16276
+137.74.56.140-146   edc* @OVH/AS16276
+137.74.56.148       edc* @OVH/AS16276
+137.74.56.150-153   edc* @OVH/AS16276
+137.74.56.155-162   edc* @OVH/AS16276
+137.74.56.165       edc* @OVH/AS16276
+137.74.56.166       edc* @OVH/AS16276
+137.74.56.168-170   edc* @OVH/AS16276
+137.74.56.172-181   edc* @OVH/AS16276
+137.74.56.183-191   edc* @OVH/AS16276
+137.74.83.1-3       edc* @OVH/AS16276
+137.74.83.5-15      edc* @OVH/AS16276
+137.74.83.17-20     edc* @OVH/AS16276
+137.74.83.23-27     edc* @OVH/AS16276
+137.74.83.30-34     edc* @OVH/AS16276
+137.74.83.36-57     edc* @OVH/AS16276
+137.74.83.59        edc* @OVH/AS16276
+137.74.83.61-63     edc* @OVH/AS16276
+137.74.142.32-47    edc* @OVH/AS16276
+137.74.142.49       edc* @OVH/AS16276
+137.74.142.51       edc* @OVH/AS16276
+137.74.142.54-58    edc* @OVH/AS16276
+137.74.142.60-63    edc* @OVH/AS16276
+137.74.218.65       edc* @OVH/AS16276
+137.74.218.67       edc* @OVH/AS16276
+137.74.218.69       edc* @OVH/AS16276
+137.74.218.70       edc* @OVH/AS16276
+137.74.218.72-78    edc* @OVH/AS16276
+137.74.218.80       edc* @OVH/AS16276
+137.74.218.88       edc* @OVH/AS16276
+137.74.218.99       edc* @OVH/AS16276
+137.74.218.100      edc* @OVH/AS16276
+137.74.218.102-103  edc* @OVH/AS16276
+137.74.218.112      edc* @OVH/AS16276
+137.74.218.117-120  edc* @OVH/AS16276
+137.74.218.124-127  edc* @OVH/AS16276
+137.74.238.0-24     edc* @OVH/AS16276
+137.74.254.4-6      edc* @OVH/AS16276
+137.74.254.11-18    edc* @OVH/AS16276
+137.74.254.21-24    edc* @OVH/AS16276
+137.74.254.26-30    edc* @OVH/AS16276
+137.74.254.32       edc* @OVH/AS16276
+137.74.254.36-45    edc* @OVH/AS16276
+137.74.254.47-48    edc* @OVH/AS16276
+137.74.254.51-52    edc* @OVH/AS16276
+137.74.254.54-63    edc* @OVH/AS16276
+142.44.191.3-7      edc* @OVH/AS16276
+142.44.191.244-248  edc* @OVH/AS16276
+142.44.195.70       edc* @OVH/AS16276
+144.217.4.56        edc* @OVH/AS16276
+144.217.6.109       edc* @OVH/AS16276
+144.217.6.110       edc* @OVH/AS16276
+144.217.6.111       edc* @OVH/AS16276
+144.217.6.115       edc* @OVH/AS16276
+144.217.14.68       edc* @OVH/AS16276
+144.217.14.69       edc* @OVH/AS16276
+144.217.14.73       edc* @OVH/AS16276
+144.217.14.81       edc* @OVH/AS16276
+144.217.51.87       edc* @OVH/AS16276
+144.217.51.88       edc* @OVH/AS16276
+144.217.51.107-110  edc* @OVH/AS16276
+144.217.51.125      edc* @OVH/AS16276
+144.217.51.180-183  edc* @OVH/AS16276
+144.217.89.112      edc* @OVH/AS16276
+144.217.89.167      edc* @OVH/AS16276
+144.217.96.202      edc* @OVH/AS16276
+144.217.97.66       edc* @OVH/AS16276
+144.217.115.6       edc* @OVH/AS16276
+144.217.123.103     edc* @OVH/AS16276
+144.217.123.104     edc* @OVH/AS16276
+144.217.123.237     edc* @OVH/AS16276
+144.217.123.238     edc* @OVH/AS16276
+144.217.125.240     edc* @OVH/AS16276
+144.217.126.156     edc* @OVH/AS16276
+144.217.126.211     edc* @OVH/AS16276
+144.217.126.227-242 edc* @OVH/AS16276
+144.217.131.105     edc* @OVH/AS16276
+144.217.131.106     edc* @OVH/AS16276
+144.217.131.107     edc* @OVH/AS16276
+144.217.139.126     edc* @OVH/AS16276
+144.217.139.144     edc* @OVH/AS16276
+144.217.139.145     edc* @OVH/AS16276
+144.217.139.146     edc* @OVH/AS16276
+144.217.139.248     edc* @OVH/AS16276
+144.217.156.3       edc* @OVH/AS16276
+144.217.175.150     edc* @OVH/AS16276
+144.217.175.187     edc* @OVH/AS16276
+144.217.179.222-224 edc* @OVH/AS16276
+144.217.188.29      edc* @OVH/AS16276
+144.217.188.38      edc* @OVH/AS16276
+144.217.188.60      edc* @OVH/AS16276
+144.217.188.75      edc* @OVH/AS16276
+144.217.188.108     edc* @OVH/AS16276
+144.217.188.126     edc* @OVH/AS16276
+144.217.188.186-195 edc* @OVH/AS16276
+144.217.188.248     edc* @OVH/AS16276
+144.217.188.249     edc* @OVH/AS16276
+144.217.189.63      edc* @OVH/AS16276
+144.217.189.103     edc* @OVH/AS16276
+144.217.203.3       edc* @OVH/AS16276
+144.217.203.61      edc* @OVH/AS16276
+144.217.203.220     edc* @OVH/AS16276
+144.217.224.4       edc* @OVH/AS16276
+144.217.224.5       edc* @OVH/AS16276
+144.217.224.18      edc* @OVH/AS16276
+144.217.224.87      edc* @OVH/AS16276
+144.217.224.111     edc* @OVH/AS16276
+144.217.224.112     edc* @OVH/AS16276
+144.217.224.185     edc* @OVH/AS16276
+144.217.251.60      edc* @OVH/AS16276
+144.217.251.85-99   edc* @OVH/AS16276
+144.217.251.229-234 edc* @OVH/AS16276
+144.217.251.238-241 edc* @OVH/AS16276
+149.56.110.51       edc* @OVH/AS16276
+149.56.110.80       edc* @OVH/AS16276
+149.56.110.230      edc* @OVH/AS16276
+149.56.110.231      edc* @OVH/AS16276
+149.56.117.121      edc* @OVH/AS16276
+149.56.142.2        edc* @OVH/AS16276
+149.56.142.104      edc* @OVH/AS16276
+149.56.142.109      edc* @OVH/AS16276
+149.56.142.161      edc* @OVH/AS16276
+149.56.142.165      edc* @OVH/AS16276
+149.56.142.175      edc* @OVH/AS16276
+149.56.142.212      edc* @OVH/AS16276
+149.56.143.152      edc* @OVH/AS16276
+149.56.143.207      edc* @OVH/AS16276
+149.56.147.186      edc* @OVH/AS16276
+149.56.179.57       edc* @OVH/AS16276
+149.56.183.245      edc* @OVH/AS16276
+149.56.191.19       edc* @OVH/AS16276
+149.56.195.51       edc* @OVH/AS16276
+149.56.195.69       edc* @OVH/AS16276
+149.56.195.246      edc* @OVH/AS16276
+149.56.244.116      edc* @OVH/AS16276
+158.69.4.18         edc* @OVH/AS16276
+158.69.4.56         edc* @OVH/AS16276
+158.69.5.227        edc* @OVH/AS16276
+158.69.5.230        edc* @OVH/AS16276
+158.69.7.241        edc* @OVH/AS16276
+158.69.48.71        edc* @OVH/AS16276
+158.69.48.230       edc* @OVH/AS16276
+158.69.198.167      edc* @OVH/AS16276
+158.69.219.97       edc* @OVH/AS16276
+164.132.71.64-75    edc* @OVH/AS16276
+164.132.71.77-79    edc* @OVH/AS16276
+164.132.192.105     edc* @OVH/AS16276
+164.132.192.191     edc* @OVH/AS16276
+167.114.147.167     edc* @OVH/AS16276
+176.31.15.245       edc* @OVH/AS16276
+178.32.52.6         edc* @OVH/AS16276
+178.32.52.177       edc* @OVH/AS16276
+178.32.52.194       edc* @OVH/AS16276
+192.99.59.232       edc* @OVH/AS16276
+192.99.207.12       edc* @OVH/AS16276
+192.99.207.43       edc* @OVH/AS16276
+192.99.207.56       edc* @OVH/AS16276
+192.99.207.58       edc* @OVH/AS16276
+192.99.207.101      edc* @OVH/AS16276
+192.99.207.103      edc* @OVH/AS16276
+198.27.88.211       edc* @OVH/AS16276
+198.27.126.74       edc* @OVH/AS16276
+198.27.126.131      edc* @OVH/AS16276
+198.27.127.183      edc* @OVH/AS16276
+198.50.155.188      edc* @OVH/AS16276
+198.50.155.208      edc* @OVH/AS16276
+198.50.238.85       edc* @OVH/AS16276
+198.50.238.226      edc* @OVH/AS16276
+198.50.238.231      edc* @OVH/AS16276
+198.50.239.206      edc* @OVH/AS16276
+198.100.158.44      edc* @OVH/AS16276
+198.100.158.54      edc* @OVH/AS16276
+
+# Sharktech
+67.21.84.0/24       :2:Neighbour of ztomy.com
+67.21.84.51         US_ztomy.com @Sharktech/AS46844
+67.21.94.0/24       US_ztomy.com @Sharktech/AS46844
+
+# setfreelife.com
+94.130.106.1        DE_s.setfreelife.com @HETZNER/AS24940
+
+# AS41011 CH-NET S.R.L. www.ch-center.com
+# SBL402608
+# NOVUM IMPORT "Content Delivery Network, Boundary line team"
+185.123.220.0/24    RO_snowshoe @CH-NET
+185.123.221.0/24    RO_snowshoe @CH-NET
+185.123.222.0/24    RO_snowshoe @CH-NET
+185.123.223.0/24    RO_snowshoe @CH-NET
+188.213.232.128/26  RO_snowshoe/26 @CH-NET
+188.214.192.0/24    RO_snowshoe @CH-NET
+193.238.247.0/24    RO_snowshoe @CH-NET
+
+# theconversionpros.com - mail{01..20}.tcprosmail.com @DIGITALOCEAN
+104.131.23.58       theconversionpros @DO
+104.131.49.71       theconversionpros @DO
+104.236.105.249     theconversionpros @DO
+159.203.139.220     theconversionpros @DO
+50.56.174.4         theconversionpros @DO
+50.56.172.35        theconversionpros @DO
+50.56.174.47        theconversionpros @DO
+50.56.174.193       theconversionpros @DO
+174.138.66.60       theconversionpros @DO
+174.138.66.63       theconversionpros @DO
+174.138.48.116      theconversionpros @DO
+45.55.224.191       theconversionpros @DO
+159.65.39.222       theconversionpros @DO
+159.65.160.91       theconversionpros @DO
+159.65.160.201      theconversionpros @DO
+159.65.168.43       theconversionpros @DO
+159.65.168.104      theconversionpros @DO
+159.65.168.215      theconversionpros @DO
+159.65.172.177      theconversionpros @DO
+159.65.162.54       theconversionpros @DO
+
+# Aykut Eskitoglu trading as OnlineNet @RADORE
+185.81.154.0/24     :2:Neighbour of OnlineNet
+185.81.154.196-222  TR_OnlineNet @RADORE
+# Ibrahim Tufek @RADORE
+193.164.7.0/24      :2:TR_netbudur.com @RADORE
+
+# mastermediagroup.hu/WORKCENTER @Azonnal@MEDIACENTER
+92.43.203.0/24      :2:Neighbour of mastermediagroup.hu
+92.43.203.177       HU_mastermediagroup.hu @Azonnal@MEDIACENTER
+92.43.204.0/24      :2:Neighbour of mastermediagroup.hu
+92.43.204.5         HU_mastermediagroup.hu @Azonnal@MEDIACENTER
+
+# Riot Games - 1.outbound*.email.accounts.riotgames.com. @YESMAIL
+97.107.26.77-80     US_riotgames.com @YESMAIL
+
+# AS35828 TERATRADE-NET @EZIT
+# NOVUM IMPORT "Content Delivery Network, Boundary line team"
+95.140.39.0/24      HU_Teratrade @EZIT
+95.140.39.249       :2:HU_Teratrade exception rdns2.designineu.com.
+185.207.8.0/23      HU_Teratrade @EZIT
+185.207.10.0/23     HU_Teratrade @EZIT
+
+# Was AS21840 SAGO, AS395374 SynergyISP
+# snowshoe
+66.118.187.12       US_secret.bbcif.com @SAGO
+66.118.187.34-62    US_SynergyISP,SAGO
+
+# AS8972 Nikulin Aleksey Mikhaylovich
+62.138.18.0/24      :2:Neighbour of N.A.Mikhaylovich
+62.138.18.170       UA_N.A.Mikhaylovich @HEG
+62.138.18.186       UA_N.A.Mikhaylovich @HEG
+62.138.18.196       UA_N.A.Mikhaylovich @HEG
+62.138.18.201       UA_N.A.Mikhaylovich @HEG
+85.25.79.0/24       :2:Neighbour of N.A.Mikhaylovich
+85.25.79.61         UA_N.A.Mikhaylovich @HEG
+188.138.70.0/24     :2:Neighbour of N.A.Mikhaylovich
+188.138.70.181      UA_N.A.Mikhaylovich @HEG
+217.172.170.0/24    :2:Neighbour of N.A.Mikhaylovich
+217.172.170.96      UA_N.A.Mikhaylovich @HEG
+# AS24961 Nikulin Aleksey Mikhaylovich
+217.79.181.0/24     :2:Neighbour of N.A.Mikhaylovich
+217.79.181.114      UA_N.A.Mikhaylovich @MYLOC
+
+# AS36114 Versaweb snowshoe spammer
+76.164.192.0/19     :2:Neighbour of Versaweb
+76.164.192.0/24     US_Versaweb
+76.164.193.0/24     US_Versaweb
+76.164.205.0/24     US_Versaweb
+76.164.224.0/21     :2:Neighbour of Versaweb
+
+# Gruppi
+#for i in {1..12}; do host -t A s${i}.gruppi.hu.; done

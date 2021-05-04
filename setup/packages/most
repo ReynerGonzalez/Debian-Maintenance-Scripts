@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e -x
+
+Pkg_install_quiet most
+update-alternatives --set pager /usr/bin/most

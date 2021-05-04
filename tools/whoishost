@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# Display parts of the whois record of the given host's IP address.
+#
+# VERSION       :0.1.2
+# DATE          :2018-12-04
+# AUTHOR        :Viktor Szépe <viktor@szepe.net>
+# LICENSE       :The MIT License (MIT)
+# URL           :https://github.com/szepeviktor/debian-server-tools
+# BASH-VERSION  :4.2+
+# LOCATION      :/usr/local/bin/whoishost
+
+WHOST="$1"
+WINFO_REGEXP='^country:|^state:|^netname:|^origin|\(NET-'
+OCTET='([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])'
+
+test -n "$WHOST" || exit 1
+WHOST_IP="$(dig +short "$WHOST" A | head -n 1)"
+
+# Check IP
+if [[ "$WHOST_IP" =~ ^${OCTET}\.${OCTET}\.${OCTET}\.${OCTET}$ ]]; then
+    whois "$WHOST_IP" | grep -E -i "$WINFO_REGEXP"
+fi

@@ -1,0 +1,19 @@
+# Fail2Ban configuration file
+
+[Definition]
+
+# Create iptables chains on start
+actionstart_on_demand = false
+
+# Terminate connections on ban
+actionban = <iptables> -I f2b-<name> 1 -s <ip> -j <blocktype>
+            <ss> --no-header --numeric --kill dst <ip>
+
+[Init]
+
+ss = ss
+
+[Init?family=inet6]
+
+# ss does not accepts inet6 addresses
+ss = true

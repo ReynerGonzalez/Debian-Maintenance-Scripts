@@ -1,0 +1,5 @@
+# Remove service when not configured
+if [ -z "$HEALTHCHECKS_URL" ]; then
+    echo "Disabling healthchecks service" 1>&2
+    sed -i -e 's|^|#|' /etc/monit/conf-available/02-healthchecks
+fi

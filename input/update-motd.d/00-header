@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# First part of motd: Welcome.
+#
+# VERSION       :0.1.0
+# URL           :https://github.com/szepeviktor/debian-server-tools
+# AUTHOR        :Viktor Szépe <viktor@szepe.net>
+# LICENSE       :The MIT License (MIT)
+# BASH-VERSION  :4.2+
+# DEPENDS       :apt-get install figlet
+# LOCATION      :/etc/update-motd.d/00-header
+# CONFIG        :/etc/hostcolor
+
+export TERM="xterm-color"
+
+if [ -x /usr/bin/lsb_release ]; then
+    # Has point release
+    DISTRIB_DESCRIPTION="$(/usr/bin/lsb_release -s -d)"
+elif [ -r /etc/os-release ]; then
+    DISTRIB_DESCRIPTION="$(sed -n -e 's/^PRETTY_NAME="\(.\+\)"$/\1/p' /etc/os-release)"
+fi
+
+if [ -s /etc/hostcolor ] && [[ "$(cat /etc/hostcolor)" =~ ^[0-9]$ ]]; then
+    tput setaf "$(cat /etc/hostcolor)"
+else
+    echo "PLEASE set host color in /etc/hostcolor"
+fi
+
+# Host name
+figlet -w "117" "$(hostname -f)"
+tput sgr0
+echo
+
+# Welcome message
+printf 'Welcome to %s (%s).\n\n' "$DISTRIB_DESCRIPTION" "$(uname -r)"

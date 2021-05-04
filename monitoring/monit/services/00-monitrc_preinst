@@ -1,0 +1,1 @@
+FROM_ADDRESS_DEFAULT="root@$(hostname -f)"

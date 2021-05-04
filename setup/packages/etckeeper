@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e -x
+
+Pkg_install_quiet etckeeper
+
+cd /etc/
+git config user.name "root"
+git config user.email "root@$(hostname --fqdn)"

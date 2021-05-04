@@ -1,0 +1,55 @@
+#!/bin/bash
+#
+# Run ntpdate daily and on reboot to correct the system clock.
+#
+# VERSION       :0.6.1
+# DATE          :2016-03-06
+# AUTHOR        :Viktor Szépe <viktor@szepe.net>
+# LICENSE       :The MIT License (MIT)
+# URL           :https://github.com/szepeviktor/debian-server-tools
+# BASH-VERSION  :4.2+
+# DEPENDS       :apt-get install ntpdate bind9-host
+# CONFIG        :/etc/default/ntpdate
+# LOCATION      :/usr/local/sbin/ntpdated
+# CRON.D        :@reboot root	/usr/local/sbin/ntpdated
+# CRON.D        :@hourly root	/usr/local/sbin/ntpdated
+
+# Work-around for pool.ntp.org DNS failures
+Get_pool_ips()
+{
+    local -i SERVER_INDEX="0"
+    # shellcheck disable=SC2206
+    local -a SERVERS=( ${NTPSERVERS} 0.europe.pool.ntp.org )
+    local A_RECORDS
+    local -A IPS
+
+    # Get at least 4 IP addresses
+    while [ -n "${SERVERS[$SERVER_INDEX]}" ] && [ "${#IPS[*]}" -lt 4 ]; do
+        A_RECORDS="$(host -t A "${SERVERS[$SERVER_INDEX]}" 2>&1 | sed -ne 's;^\S\+ has \(IPv4 \)\?address \([.0-9]\+\)$;\2;p')"
+        # Retry on DNS failure
+        if [ -z "$A_RECORDS" ]; then
+            sleep 3
+            continue
+        fi
+        while read -r A; do
+            # Prevent duplication by using array indices
+            IPS[$A]="1"
+        done <<<"$A_RECORDS"
+
+        SERVER_INDEX+="1"
+    done
+
+    echo "${!IPS[*]}"
+}
+
+set -e
+
+if [ -r /etc/default/ntpdate ]; then
+    # shellcheck disable=SC1091
+    source /etc/default/ntpdate
+fi
+
+# shellcheck disable=SC2086,SC2046
+/usr/sbin/ntpdate -s ${NTPOPTIONS} $(Get_pool_ips)
+
+exit 0

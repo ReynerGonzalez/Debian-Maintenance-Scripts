@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Ping healthchecks.io.
+#
+# VERSION       :0.2.0
+# LOCATION      :/usr/local/bin/healthchecks-test.sh
+
+set -e
+
+HEALTHCHECKS_URL="$1"
+
+test -n "$HEALTHCHECKS_URL"
+
+HEALTHCHECKS_RESPONSE="$(wget --quiet --inet4-only --tries=1 --timeout=10 --output-document=- "$HEALTHCHECKS_URL")"
+
+grep -Fx "OK" <<< "$HEALTHCHECKS_RESPONSE"

@@ -1,0 +1,171 @@
+# See jail.conf(5) man page for more information
+
+# @TODO vallumd - central firewall
+
+[DEFAULT]
+#          localhost   own IP
+#                                    proxy         Googlebot      PayPal IPN
+ignoreip = 127.0.0.0/8 @@IP@@ 88.151.99.143 66.249.64.0/19 173.0.80.0/22
+           35.158.136.0/24 52.57.254.0/24 54.240.128.0/18 205.251.192.0/19 216.137.32.0/19
+#          Amazon CloudFront
+# wget -qO- "https://ip-ranges.amazonaws.com/ip-ranges.json"|jq -r '.prefixes[] | select(.service == "CLOUDFRONT").ip_prefix'|sortip
+
+logencoding = utf-8
+
+# ignorecommand = /path/to/command <ip>
+
+bantime = 3600
+
+findtime = 600
+
+maxretry = 5
+
+backend = pyinotify
+
+usedns = no
+
+sender = @@SENDER@@
+
+#destemail = fail2ban-leanmail@example.com
+destemail = admin@szepe.net
+
+# Separate chain for Fail2ban
+chain = fail2ban
+
+# Ban & send an e-mail with GEOIP data and relevant log lines
+action_mgl = %(banaction)s[name=%(__name__)s, bantime="%(bantime)s", port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+             sendmail-geoip-lines[name=%(__name__)s, sender="%(sender)s", dest="%(destemail)s", logpath="%(logpath)s", chain="%(chain)s"]
+action = %(action_mgl)s
+
+# Ban by CloudFlare send an e-mail with GEOIP data relevant log lines
+action_cf1_mgl = cloudflare[cfuser="%(cf1email)s", cftoken="%(cf1apikey)s"]
+                 sendmail-geoip-lines[name=%(__name__)s, sender="%(sender)s", dest="%(destemail)s", logpath="%(logpath)s", chain="%(chain)s"]
+
+# sendmail-geoip-lines = 2×geoip + host + grep log + sendmail
+timeout = 7
+
+# Apache error logs in user homes
+apache_user_error_log = /home/*/website/log/*error.log
+# @TODO Remove %(logpath)s and change `grep '<ip>' <logpath>` to <matches>
+
+#
+# JAILS
+#
+
+[sshd]
+enabled  = true
+mode     = aggressive
+port     = @@SSHPORT@@
+maxretry = 3
+
+[apache-default]
+enabled  = true
+logpath  = /var/log/apache2/access.log
+maxretry = 3
+# 24h
+bantime  = 86400
+# Ban only
+action   = %(action_)s
+protocol = all
+banaction = %(banaction_allports)s
+
+[apache-combined]
+enabled  = true
+logpath  = %(apache_error_log)s
+#           %(apache_user_error_log)s
+maxretry = 6
+# 24h
+bantime  = 86400
+port     = http,https
+
+[apache-instant]
+enabled  = true
+logpath  = %(apache_error_log)s
+#           %(apache_user_error_log)s
+maxretry = 1
+# 24h
+bantime  = 86400
+port     = http,https
+
+[apache-cf1-combined]
+#enabled  = true
+filter   = apache-combined
+logpath  = /var/log/apache2/*errorCF.log
+maxretry = 6
+# 24h
+bantime  = 86400
+action   = %(action_cf1_mgl)s
+cf1email = 
+cf1apikey= 
+
+[apache-cf1-instant]
+#enabled  = true
+filter   = apache-instant
+logpath  = /var/log/apache2/*errorCF.log
+maxretry = 1
+# 24h
+bantime  = 86400
+action   = %(action_cf1_mgl)s
+cf1email = 
+cf1apikey= 
+
+[suhosin]
+#enabled  = true
+logpath  = %(suhosin_log)s
+# 1 week
+bantime  = 604800
+port     = http,https
+
+[horde]
+#enabled  = true
+logpath  = /home/horde/website/log/horde.log
+port     = http,https
+
+[courier-smtp]
+#enabled  = true
+maxretry = 3
+
+[courier-auth]
+#enabled  = true
+maxretry = 3
+
+[courier-auth-instant]
+#enabled  = true
+maxretry = 1
+
+[proftpd]
+# When the default locale for your system is not en_US.UTF-8
+# be sure to add this to /etc/default/proftpd
+# export LC_TIME="en_US.UTF-8"
+#enabled  = true
+maxretry = 2
+
+[proftpd-notif]
+# When the default locale for your system is not en_US.UTF-8
+# be sure to add this to /etc/default/proftpd
+# export LC_TIME="en_US.UTF-8"
+#enabled  = true
+filter   = proftpd-notif
+logpath  = %(proftpd_log)s
+findtime = 10
+maxretry = 1
+bantime  = 1
+port     = ftp,ftp-data,ftps,ftps-data
+action   = %(mta)s-info[name=%(__name__)s, dest="%(destemail)s", logpath="%(logpath)s"]
+
+[recidive]
+enabled  = true
+logpath  = /var/log/fail2ban.log
+# 1 week
+findtime = 604800
+maxretry = 3
+# 1 week
+bantime  = 604800
+# Not just TCP
+protocol = all
+# No email alert
+action   = iptables-allports[name=recidive, bantime="%(bantime)s", port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+#           cloudflare[cfemail="%(cfemail)s", cfapikey="%(cfapikey)s"]
+#cfemail  = 
+#cfapikey = 
+# Check action: fail2ban-client get recidive action cloudflare

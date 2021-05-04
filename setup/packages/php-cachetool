@@ -1,0 +1,19 @@
+#!/bin/bash
+
+CACHETOOL_URL="http://gordalina.github.io/cachetool/downloads/cachetool.phar"
+# For PHP 7.0
+#CACHETOOL_URL="https://github.com/gordalina/cachetool/raw/gh-pages/downloads/cachetool-3.2.1.phar"
+
+set -e -x
+
+wget -O /usr/local/bin/cachetool "$CACHETOOL_URL"
+chmod +x /usr/local/bin/cachetool
+
+# Usage
+# cachetool --tmp-dir=/home/prg999/website/tmp --fcgi=/run/php/php7.4-fpm-prg999.sock opcache:status
+#
+# Config: ~/.cachetool.yml
+#
+#     adapter: fastcgi
+#     fastcgi: "/run/php/php7.4-fpm-prg999.sock"
+#     temp_dir: "/home/prg999/website/tmp"

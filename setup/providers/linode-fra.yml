@@ -1,0 +1,7 @@
+# Linode in Frankfurt
+hosting-company: Linode
+virtualization: kvm
+software:
+    linode-autokernel: Linode Kernels auto-renew on reboot
+documentation:
+    - https://www.linode.com/kernels/

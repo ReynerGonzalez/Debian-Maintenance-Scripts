@@ -1,0 +1,27 @@
+# /etc/courier/smtpaccess/broken-servers
+
+# Problems and solutions
+#
+# - Missing reverse DNS hostname (HELO/EHLO) BOFHCHECKHELO=0
+# - Invalid envelop sender (MAIL FROM:) BOFHCHECKDNS=0
+
+
+# Broken SMTP servers and special cases - allow,BLOCK,BOFHCHECKDNS=0,BOFHCHECKHELO=0
+
+# Freemail.hu broken forwarding - fmfwd0{0..2}.freemail.hu.
+195.228.245.78	allow,BOFHSPFMAILFROM=off
+195.228.245.79	allow,BOFHSPFMAILFROM=off
+195.228.245.80	allow,BOFHSPFMAILFROM=off
+
+# kisgep.hu - mail.phantasy.hu. (spammy transactional emails)
+94.199.181.186	allow,BLOCK
+
+# mail.com - AUTH PLAIN attacker neighbors
+74.208.4.200	allow,BLOCK
+74.208.4.201	allow,BLOCK
+
+# ITS AS28716 - smtp0*.invionewsletter.it - Fly Flot newsletter
+164.138.48.40	allow,BLOCK
+164.138.48.41	allow,BLOCK
+164.138.48.42	allow,BLOCK
+164.138.48.43	allow,BLOCK

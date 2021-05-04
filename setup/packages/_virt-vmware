@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e -x
+
+# Detect VMware
+if [ ! -c /dev/mem ]; then
+    exit 1
+fi
+# VMware UUID
+dmidecode -s system-uuid
+
+if vmtoolsd --version; then
+    # Uninstall vmtools from ISO
+    vmware-uninstall-tools.pl 2>&1 | tee /root/vmware-uninstall.log
+    rm -rf /usr/lib/vmware-tools
+fi
+
+# Open VMware tools
+# @nonDebian
+Pkg_install_quiet -t jessie-backports open-vm-tools
+
+# Time synchronization
+vmware-toolbox-cmd timesync enable
+vmware-toolbox-cmd timesync status

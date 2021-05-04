@@ -1,0 +1,33 @@
+init-alert (0.3.4) stable; urgency=low
+
+  * Proper s-nail usage
+  * Don't wait on boot
+  * Check email address
+
+ -- Viktor Szépe <viktor@szepe.net>  Mon, 22 Jan 2018 03:53:41 +0000
+
+init-alert (0.3.3) stable; urgency=high
+
+  * Depend only on s-nail
+
+ -- Viktor Szépe <viktor@szepe.net>  Wed, 17 Jan 2018 23:04:10 +0000
+
+init-alert (0.3.2) stable; urgency=low
+
+  * Clean up dependencies
+
+ -- Viktor Szépe <viktor@szepe.net>  Sun, 01 Oct 2017 09:26:39 +0000
+
+init-alert (0.3.1) stable; urgency=low
+
+  * Quieter default email address
+  * Fixed author in init script
+
+ -- Viktor Szépe <viktor@szepe.net>  Sat, 04 Mar 2017 22:25:18 +0000
+
+init-alert (0.3.0) stable; urgency=low
+
+  * Initial release
+  * Merge boot-alert and halt-alert
+
+ -- Viktor Szépe <viktor@szepe.net>  Tue, 18 Oct 2016 00:44:41 +0000

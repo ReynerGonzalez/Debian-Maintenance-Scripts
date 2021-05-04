@@ -1,0 +1,70 @@
+# AS29073 - Ecatel LTD / Quasi Networks / Novogara, type: SSH,HTTP
+#: ipset -exist restore <ipset/ecatel.ipset
+#: iptables -w -I myattackers-ipset -m set --match-set ecatel src -j REJECT
+create ecatel hash:net family inet hashsize 64 maxelem 64
+flush ecatel
+add ecatel 5.8.18.0/24
+add ecatel 46.243.146.0/24
+add ecatel 46.243.148.0/24
+add ecatel 77.72.83.0/24
+add ecatel 80.82.64.0/24
+add ecatel 80.82.65.0/24
+add ecatel 80.82.66.0/24
+add ecatel 80.82.67.0/24
+add ecatel 80.82.68.0/24
+add ecatel 80.82.69.0/24
+add ecatel 80.82.70.0/24
+# 71,72,75 in AS56611 - REBACOM
+# 73,74 unrouteable
+add ecatel 80.82.76.0/24
+add ecatel 80.82.77.0/24
+add ecatel 80.82.78.0/24
+add ecatel 80.82.79.0/24
+add ecatel 89.248.160.0/21
+add ecatel 89.248.168.0/24
+add ecatel 89.248.169.0/24
+add ecatel 89.248.170.0/23
+add ecatel 89.248.172.0/23
+add ecatel 89.248.174.0/24
+add ecatel 93.174.88.0/21
+add ecatel 94.102.48.0/20
+add ecatel 145.249.104.0/22
+add ecatel 188.72.103.0/24
+add ecatel 188.72.106.0/24
+add ecatel 188.72.117.0/24
+add ecatel 196.16.0.0/14
+add ecatel 213.184.105.0/24
+add ecatel 213.184.113.0/24
+add ecatel 213.184.115.0/24
+add ecatel 213.184.117.0/24
+add ecatel 213.184.124.0/24
+
+# AS204655 - NOVOGARA
+add ecatel 185.216.140.0/23
+
+# AS48090 - PPTECHNOLOGY
+add ecatel 45.148.10.0/24
+
+# AS35478 - Bunea TELECOM
+add ecatel 45.142.195.0/24
+
+# AS208410 - internet-hosting
+#add ecatel 87.246.7.0/24
+add ecatel 212.70.149.0/24
+
+# AS62355 - NetworkDedicated
+#add ecatel 185.39.8.0/22
+
+# AS48352 - overflow-net / IP Starcev Eugenii Borisovich
+#add ecatel 46.161.9.0/24
+#add ecatel 146.185.222.0/24
+
+# AS209282 - Feo Prest / BpHost / BulletProof
+add ecatel 45.13.36.0/24
+add ecatel 45.13.39.0/24
+
+# AS209128 - SPEEDYINTERNET
+add ecatel 185.137.111.0/24
+
+# AS51787 - STELLAR ADVANCED / Bunea TELECOM?
+add ecatel 193.32.160.0/24

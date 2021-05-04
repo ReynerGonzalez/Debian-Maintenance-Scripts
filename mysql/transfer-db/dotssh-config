@@ -1,0 +1,7 @@
+Host develop1
+    HostName develop1.example.com
+    Port 22
+    User dbtransferadmin
+    PreferredAuthentications publickey
+    IdentityFile ~/.ssh/dbtransferadmin.key
+    Compression no

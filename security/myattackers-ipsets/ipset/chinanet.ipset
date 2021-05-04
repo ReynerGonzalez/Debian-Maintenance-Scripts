@@ -1,0 +1,19 @@
+# AS4134 - CHINANET-BACKBONE type: UDP
+#: ipset -exist restore <ipset/chinanet.ipset
+#: iptables -w -I myattackers-ipset -m set --match-set chinanet src -j REJECT
+create chinanet hash:net family inet hashsize 64 maxelem 32
+flush chinanet
+# HANGZHOU-HOLIDAY-HOTEL
+add chinanet 60.191.0.240/29
+# ZHEJIANG-GANGKEDA-LTD
+add chinanet 60.191.29.16/29
+# HZ-HITECH
+add chinanet 60.191.48.200/29
+# ZHEJING-MINGFENGJIA-LIMITED
+add chinanet 60.191.49.184/29
+# JINFANDA-CHEMICAL-LTD
+add chinanet 122.224.153.104/29
+# HANGZHOU-XINLEI-NETBAR
+add chinanet 218.75.37.16/29
+# HANGZHOU-RONGTODING
+add chinanet 218.75.38.208/29

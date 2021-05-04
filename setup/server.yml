@@ -1,0 +1,221 @@
+---
+# Server datasheet
+
+system:
+    fqdn: ##host.example.com
+    uuid: ##/usr/sbin/dmidecode -s system-uuid | tr '[:upper:]' '[:lower:]'
+    os: "Debian ‘buster’"
+    install-date: ##YYYY-MM-DD
+    # tput sgr0;for C in {1..7};do tput setaf $C;echo -n "■${C}■  ";tput sgr0;done;echo
+    host-color: 7
+    trespass-warning: "Ez a szerver A/AZ-CÉG használatában áll. Másoknak a belépés tilos."
+    #trespass-warning: "This server is used by COMPANY. Unauthorized entry is prohibited."
+    storage-provider: ##"Amazon S3"
+    mail-provider: ##"SparkPost"
+
+# Package settings
+package:
+    apt:
+        # See /package/apt-sources/
+        sources:
+            - sury-php
+            - szepeviktor
+            - percona
+            #- mysql-5.7
+            #- oracle-mysql-server
+            #- nodejs
+            - goaccess
+        extra:
+            - php7.4-fpm
+            - grepcidr
+            #- nodejs
+            #- percona-server-server-5.7
+            #- goaccess/testing
+    ca-certificates:
+        # Buster has the latest version
+        # http://metadata.ftp-master.debian.org/changelogs/main/c/ca-certificates/testing_changelog
+        install-testing: false
+    adduser:
+        firstuser:
+            name: viktor
+            ssh-key: "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJnaM2JLvO4DWkmmSXys+jn0KhTRVkCfAAhv/1Pszs0DJTheQgOR9e3ThNCgR7CxIqZ5kXrZ+BIDtDs5IGrg9IA= szv-ecdsa"
+    openssh-server:
+        # Under 1024
+        port: 22
+    # Fail2Ban depends on GeoIP2
+    geoipupdate:
+        accountid: ""
+        licensekey: ""
+    fail2ban:
+        sender: ##admin@example.com
+    apache2:
+        prg-http-user: ##user
+        prg-http-pwd: ##secret
+        prg-ssl-cn: ##prg.1.2.3.4.xip.io
+        mod_ratelimit: disabled
+    python2:
+        install-deprecated: false
+
+# Mail server reputation
+mail-server:
+    monitoring:
+        - https://www.projecthoneypot.org/
+        - https://mxtoolbox.com/
+        - https://www.rblmon.com/accounts/register/
+        - https://rbltracker.com/
+    registered:
+        - https://www.dnswl.org/selfservice/
+        - https://postmaster.google.com/
+        - https://postmaster.live.com/snds/
+        - https://ers.trendmicro.com/reputations/global_approved_list
+
+# Custom data directories
+cruft:
+    - /usr/share/locale
+    - /usr/share/man
+    - /home
+    - /root
+    - /etc/php/7.0
+    - /etc/php/7.1
+    - /etc/php/7.2
+    - /etc/php/7.3
+    - /etc/php/7.4
+    - /var/lib/php/modules
+    - /usr/local/bin
+    - /usr/local/sbin
+    - /usr/local/src
+    - /usr/local/lib/node_modules
+    - /usr/local/lib/python2.7
+    - /usr/local/lib/python3.4
+    - /var/lib/mysql
+    - /var/log
+# cruft $(shyaml get-values cruft </root/server.yml | xargs -n 1 echo " --ignore ") >cruft.log
+
+# Users of this server
+users:
+
+  #"User Name":
+  #  type: user account|empty domain|email account|cron job|Piwik|OWA|website|mailman|mirror
+  #  services:
+  #      - service 1
+  #      - service 2
+
+# Services provided by this server
+services:
+
+  private:
+
+    #"service name 1":
+    #  type: daemon|login script|cron job
+    #  transport: tcp/123|php-ext|vhost|uds|name-service
+    #  source: non-packaged|non-repo
+    #  location: /path/dir
+    #  description: text
+    #"service name 2":
+    #  type: daemon
+    #  transport: tcp/443
+    #  description: vhost.name
+    irqbalance:
+      type: daemon
+    fail2ban:
+      type: daemon
+      transport: uds
+    suhosin:
+      type: php-ext
+      source: non-packaged
+      description: /usr/lib/php5/20121212
+    mod-pagespeed:
+      # daemon or Apache module?
+    drush:
+      source: composer
+      location: /opt/drush
+    courier-mta:
+      type: daemon
+      transport: [ tcp/25, tcp/465, tcp/587 ]
+    spamassassin:
+      type: daemon
+      transport: tcp/783
+    monit:
+      type: daemon
+      transport: uds
+    vmwaretools:
+      transport: VMCI socket
+      description: Virtual Machine Communication Interface
+    unattended-upgrades:
+      type: cron job
+    unscd:
+      type: daemon
+      transport: name service
+    mariadb:
+      type: daemon
+      transport: [ tcp/3306, uds ]
+    php7.4-fpm:
+      type: daemon
+      transport: uds
+    syslog-errors:
+      type: cron job
+
+  public:
+
+    munin-node:
+      type: daemon
+      transport: tcp/4949
+    apache2:
+      type: daemon
+      transport: [ tcp/80, tcp/443 ]
+
+# Package management
+packaging:
+
+    apt:
+        list-command: dpkg -l
+        location: /
+    pip2:
+        list-command: pip2 list
+        location: /usr/local/lib/python2.7
+    pip3:
+        list-command: pip3 list
+        location: /usr/local/lib/python3.4
+    # PEAR + PECL
+    pear:
+        list-command: pear list-channels && pear list -c CHANNEL && pear list -c pecl.php.net
+        location: /usr/share/php
+    node:
+        list-command: npm -g ls
+        location: /usr/lib/node_modules
+    ruby:
+        list-command: gem list
+        location: /usr/lib/ruby/vendor_ruby
+
+# shyaml get-values buster-backports </root/server.yml | xargs -- apt-get install -t buster-backports # -y
+buster-backports:
+    - init-system-helpers
+    - needrestart
+    - geoipupdate
+    - git
+    - mtr-tiny
+    - whois
+    - s3ql
+
+remarks: |
+    Missing default services
+    Things to do
+
+# Provider profile: cat ./providers/upcloud-defra1.yml
+
+teardown:
+    - Notify users
+    - Email accounts
+    - RELAYCLIENT on the smarthost
+    - DNS resolver access
+    - Remove from whitelists, postmaster tools, RBL monitors
+    - Revoke SSL certificates
+    - Remove from healthchecks.io and remote monitoring
+    - Remove DNS records
+    - Remove/reset PTR record
+    - Delete server
+    - Cancel domain registration
+
+# YAML editor: http://yaml-online-parser.appspot.com/
+#     shyaml get-value <server.yml
+...

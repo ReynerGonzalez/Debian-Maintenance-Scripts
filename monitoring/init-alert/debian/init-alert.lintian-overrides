@@ -1,0 +1,2 @@
+# Boot alert sent after all services are up
+init-alert: init.d-script-depends-on-all-virtual-facility

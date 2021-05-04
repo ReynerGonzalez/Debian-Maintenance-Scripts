@@ -1,0 +1,11 @@
+# AS202984 - TEAM-HOST / Chernyshov Aleksandr Aleksandrovich
+#: ipset -exist restore <ipset/team-host.ipset
+#: iptables -w -I myattackers-ipset -m set --match-set team-host src -j REJECT
+create team-host hash:net family inet hashsize 64 maxelem 64
+flush team-host
+add team-host 45.82.153.0/24
+add team-host 185.211.244.0/24
+# *.diverseenvironment.com *.changehappening.com 185.211.245.192/26
+add team-host 185.211.245.0/24
+# Irida Telekom
+add team-host 193.35.48.0/22

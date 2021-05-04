@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -e -x
+
+# Dependencies
+Pkg_install_quiet libpam-cracklib bc figlet
+
+# Enforce strong passwords
+# man 8 pam_cracklib
+sed -i -e 's|^\(password\t\+requisite\t\+pam_cracklib\.so\).\+$|\1 retry=3 difok=3 minlen=16 minclass=2 maxrepeat=2 maxsequence=3 reject_username|' \
+    /etc/pam.d/common-password
+
+# Nice welcome screen
+# @FIXME Python 2 does not handle UTF-8 in YAML
+printf '*\n*** %s ***\n*\n\n' "$(Data get-value system.trespass-warning)" >/etc/motd.tail
+
+Data get-value system.host-color "7" > /etc/hostcolor
+
+if [ -d /etc/update-motd.d ]; then
+    # Remove default uname script
+    if [ -f /etc/update-motd.d/10-uname ] && [ "$(stat -c "%s" /etc/update-motd.d/10-uname)" == 23 ]; then
+        rm /etc/update-motd.d/10-uname
+    fi
+    # Halt on non-empty script directory
+    test -z "$(find /etc/update-motd.d/ -type f -prune)"
+else
+    mkdir /etc/update-motd.d
+fi
+
+# Backup original motd
+mv /etc/motd "/etc/motd~"
+
+# Make motd a symlink
+ln -sf /var/run/motd /etc/motd
+
+# Install scripts
+Dinstall input/update-motd.d/00-header
+Dinstall input/update-motd.d/10-sysinfo
+Dinstall input/update-motd.d/20-tail
+
+Dinstall input/profile.d/motd_user.sh
+Dinstall input/profile.d/reboot_required.sh
+Dinstall input/profile.d/monit_status.sh

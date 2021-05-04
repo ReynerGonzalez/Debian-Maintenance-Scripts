@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Display every parent directories' owner and permissions.
+#
+# VERSION       :0.2.0
+# LOCATION      :/usr/local/bin/lsrev
+
+ONE_PATH="$1"
+
+[ "${ONE_PATH:0:1}" == "/" ] || ONE_PATH="$(pwd)/${ONE_PATH}"
+
+while [ "$ONE_PATH" != "/" ]; do
+    ls -l -d "$ONE_PATH"
+
+    ONE_PATH="$(dirname "$ONE_PATH")"
+done

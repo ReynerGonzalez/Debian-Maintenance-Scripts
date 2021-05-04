@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Execute git with options.
+#
+# VERSION       :0.1.0
+
+GIT_DIR=~/.git GIT_WORK_TREE=~/website/html /usr/bin/git "$@"

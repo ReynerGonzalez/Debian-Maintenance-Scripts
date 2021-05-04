@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e -x
+
+if hash npm 2>/dev/null; then
+    # nodejs from nodesource
+    # NPM global config: /usr/etc/npmrc
+
+    # Make sure packages are not installed under /usr/lib/node_modules
+    npm config -g set prefix "/usr/local"
+    npm config -g set unicode true
+
+    # Update NPM
+    npm install -g npm@latest
+else
+    # Debian packaged nodejs
+    # NPM global config: /usr/local/lib/node_modules/npm/npmrc
+
+    # NPM from source
+    # https://www.npmjs.com/package/npm?activeTab=versions
+    (
+        cd /usr/local/src/
+        mkdir npm
+        wget "$(wget -qO- "https://registry.npmjs.org/npm/latest" | jq -r '.dist.tarball')"
+        tar --directory=npm -xzf npm-*.tgz
+        rm npm-*.tgz
+        cd npm/package/
+        # Skip HTML docs
+        sed -i -e 's/^\(docs: mandocs\) htmldocs$/\1/' Makefile
+
+        # Installation
+        # Make sure packages are not installed under /usr/lib/node_modules
+        ./configure --prefix="/usr/local" --unicode=true
+        make install
+    )
+fi

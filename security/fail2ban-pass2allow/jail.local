@@ -1,0 +1,12 @@
+[pass2allow]
+# Allow FTP traffic after successful HTTP auth
+enabled   = true
+filter    = apache-pass
+banaction = allow-iptables-multiport
+# Access log of the website with HTTP auth
+logpath   = /var/log/apache2/access.log
+port      = ftp,ftp-data,ftps,ftps-data
+protocol  = tcp
+bantime   = 3600
+maxretry  = 1
+findtime  = 1

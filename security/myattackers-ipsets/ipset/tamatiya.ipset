@@ -1,0 +1,32 @@
+# AS50360 - Tamatiya / 4vendeta.com, connections to Ecatel
+#: ipset -exist restore <ipset/tamatiya.ipset
+#: iptables -w -I myattackers-ipset -m set --match-set tamatiya src -j REJECT
+create tamatiya hash:net family inet hashsize 64 maxelem 32
+flush tamatiya
+# ZervDNS / Bunea
+add tamatiya 92.118.38.0/24
+
+# AS209272 - Alviva
+add tamatiya 185.222.211.0/24
+
+# AS202325 - 4Media
+add tamatiya 78.128.112.0/24
+
+# AS209160 - Miti2000
+add tamatiya 78.128.113.0/24
+
+# AS60310 - Ahoura / Mobin Ertebatat Zaman / Connected to AS133398 TELE-AS Tele Asia
+add tamatiya 45.142.120.0/24
+# AS44684 - Mythic Beasts / Farhang Azma
+add tamatiya 185.143.72.0/23
+# AS44684 - Mythic Beasts / VPS-BYTE
+add tamatiya 185.143.74.0/23
+
+# AS200391 - KREZ 999 / Technology Advanced Investment Limited
+add tamatiya 5.188.206.0/24
+
+# AS133398 - TELE-AS / Tele Asia
+add tamatiya 91.191.209.0/24
+
+# AS44446 - SibirInvest / Kiktev Nikolay Vladimirovich / Reldas
+add tamatiya 185.156.73.0/24

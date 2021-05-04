@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e -x
+
+# Enable immark plugin
+#     https://www.rsyslog.com/doc/v8-stable/configuration/modules/immark.html
+# shellcheck disable=SC2016
+sed -i -e 's|^#\(module(load="immark")\)|\1|' /etc/rsyslog.conf
+
+# Always alert root
+printf '\n# Alert root\n*.warn\t\t\t\t:omusrmsg:root\n' >>/etc/rsyslog.conf
+
+# Restart
+service rsyslog restart
+
+# Simple syslog monitoring
+cp ../monitoring/syslog-errors-excludes.grep /etc/syslog-errors-excludes.grep
+Dinstall monitoring/syslog-errors.sh
+
+# Logrotate periods
+# /var/log/syslog
+#   rotate 15
+#   weekly
+sed -i -e 's|\brotate 7$|rotate 15|' /etc/logrotate.d/rsyslog
+sed -i -e 's|\bdaily$|weekly|' /etc/logrotate.d/rsyslog
+# /var/log/mail.info ...
+#   rotate 15
+# Already "weekly"
+sed -i -e 's|\brotate 4$|rotate 15|' /etc/logrotate.d/rsyslog

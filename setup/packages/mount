@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e -x
+
+# Create swap file
+if [ -z "$(tail -n +2 /proc/swaps)" ]; then
+    packages/_swap
+fi
+
+# Check swap
+swapoff -a
+swapon -a

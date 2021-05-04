@@ -1,0 +1,12 @@
+# Magyar Telekom client emails
+#     ##host -t A mail-outd.mail.t-online.hu. | sort -n
+#     host -t TXT t-online.hu. | grep -Eo "[0-9/.]{7,}" | sed -e 's|^.*$|#&\tallow,BLOCK|'
+#84.2.42.4/30	allow,BLOCK
+#84.2.227.136/30	allow,BLOCK
+#195.228.240.48/28	allow,BLOCK
+#195.228.240.64/29	allow,BLOCK
+#84.2.42.62/31	allow,BLOCK
+#84.2.42.64/31	allow,BLOCK
+#84.2.227.158/31	allow,BLOCK
+#84.2.227.160/31	allow,BLOCK
+#195.228.240.24/29	allow,BLOCK

@@ -1,0 +1,33 @@
+{
+  "name": "szepeviktor/asset-packagist",
+  "description": "How to use Asset Packagist.",
+  "require": {
+    "php": ">=7.0",
+    "npm-asset/mustache": "^3.0.1",
+    "oomphinc/composer-installers-extender": "^1.1.2"
+  },
+  "config": {
+    "classmap-authoritative": true,
+    "preferred-install": {
+      "*": "dist"
+    }
+  },
+  "extra": {
+    "installer-paths": {
+      "app/assets/{$name}/": [
+        "type:npm-asset",
+        "type:bower-asset"
+      ]
+    },
+    "installer-types": [
+      "npm-asset",
+      "bower-asset"
+    ]
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
+}

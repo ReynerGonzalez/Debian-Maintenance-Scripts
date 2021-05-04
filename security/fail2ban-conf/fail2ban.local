@@ -1,0 +1,6 @@
+[Definition]
+
+loglevel = NOTICE
+
+dbpurgeage = 648000
+

@@ -1,0 +1,54 @@
+#!/bin/bash
+
+set -e -x
+
+Pkg_install_quiet chrony
+
+CHRONY_POOL="$(Data get-value ntp-server "")"
+if [ -z "$CHRONY_POOL" ]; then
+    CHRONY_POOL="2.europe.pool.ntp.org"
+fi
+
+cat >/etc/chrony/chrony.conf <<EOF
+# Welcome to the chrony configuration file. See chrony.conf(5) for more
+# information about usuable directives.
+pool ${CHRONY_POOL} iburst
+pool 2.debian.pool.ntp.org iburst
+
+# This directive specify the location of the file containing ID/key pairs for
+# NTP authentication.
+keyfile /etc/chrony/chrony.keys
+
+# Close command port.
+cmdport 0
+
+# This directive specify the file into which chronyd will store the rate
+# information.
+driftfile /var/lib/chrony/chrony.drift
+
+# Uncomment the following line to turn logging on.
+log statistics
+
+# Log files location.
+logdir /var/log/chrony
+
+# Log 10 msec offset changes.
+logchange 0.010
+
+## seccomp (-F -1) is not compatible with mailonchange
+#mailonchange root 0.500
+
+# Stop bad estimates upsetting machine clock.
+maxupdateskew 100.0
+
+# This directive enables kernel synchronisation (every 11 minutes) of the
+# real-time clock. Note that it can’t be used along with the 'rtcfile' directive.
+# Virtual servers do not have permanent RTCs.
+#rtcsync
+
+# Step the system clock instead of slewing it if the adjustment is larger than
+# one second, but only in the first three clock updates.
+makestep 1 3
+EOF
+
+service chrony restart

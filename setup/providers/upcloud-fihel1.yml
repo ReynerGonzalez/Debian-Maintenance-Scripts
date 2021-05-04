@@ -1,0 +1,34 @@
+# UpCloud fihel1 https://www.upcloud.com/register/?promo=U29Q8S
+hosting-company: UpCloud
+virtualization: kvm
+networking:
+    method: dhcp
+    name: eth0
+    resolver:
+        # UpCloud fihel1 https://www.upcloud.com/support/dns-servers/
+        - 80.69.160.26
+        # google-public-dns-a.google.com.
+        - 8.8.8.8
+        # MAXNS=3
+        # @Sigmatic
+        #- 80.69.171.167
+        # google-public-dns-b.google.com.
+        #- 8.8.4.4
+    # IPv6 interface
+    inet6:
+        method: auto
+        name: eth0
+        resolver:
+            # google-public-dns-a.google.com.
+            - 2001:4860:4860::8888
+            # MAXNS=3
+            # google-public-dns-b.google.com.
+            #- 2001:4860:4860::8844
+    # Private network
+    private:
+        method: dhcp
+        name: eth1
+provider-package:
+    # Soft restart needs
+    - acpid
+auto-check-system: true

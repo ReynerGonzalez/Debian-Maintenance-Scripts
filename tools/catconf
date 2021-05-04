@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Show non-empty config file lines.
+#
+# VERSION       :0.2.0
+# DATE          :2015-12-07
+# AUTHOR        :Viktor Szépe <viktor@szepe.net>
+# LICENSE       :The MIT License (MIT)
+# URL           :https://github.com/szepeviktor/debian-server-tools
+# BASH-VERSION  :4.2+
+# LOCATION      :/usr/local/bin/catconf
+
+EMPTY_LINES='^\s*#|^\s*$'
+
+grep -Ev "$EMPTY_LINES" "$@"

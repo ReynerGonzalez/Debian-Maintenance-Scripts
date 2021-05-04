@@ -1,0 +1,190 @@
+#!/bin/bash
+
+set -e -x
+
+# First user
+
+U="$(Data get-value package.adduser.firstuser.name)"
+SSH_KEY="$(Data get-value package.adduser.firstuser.ssh-key)"
+
+if [ -z "$(getent passwd "$U")" ]; then
+    # GECOS: Full name,Room number,Work phone,Home phone
+    adduser --gecos "" "$U"
+    HOME_DIR="$(getent passwd "$U" | cut -d ":" -f 6)"
+
+    # Add SSH key
+    SSH_DIR="${HOME_DIR}/.ssh"
+    mkdir --mode 0700 "$SSH_DIR"
+    echo "$SSH_KEY" >"${SSH_DIR}/authorized_keys"
+    chown -R "${U}:${U}" "$SSH_DIR"
+    # Display fingerprint
+    ssh-keygen -l -v -f "${SSH_DIR}/authorized_keys"
+
+    # Add to sudoers
+    adduser "$U" sudo
+
+    # Expire password
+    #passwd -e "$U"
+
+    # bash
+    sed -i -e 's#^xterm\*|rxvt\*#xterm*|rxvt*|putty*#' "${HOME_DIR}/.bashrc"
+
+    # wget
+    echo -e "content_disposition = on" >"${HOME_DIR}/.wgetrc"
+
+    # sensible-utils
+    echo 'SELECTED_EDITOR="/usr/bin/mcedit"' >"${HOME_DIR}/.selected_editor"
+
+    # @TODO /etc/skel/.profile
+fi
+
+# Disable root password
+echo "root:*" | chpasswd -c NONE
+
+# Check passwords for other users
+PASSWORD_USERS="$(cut -d ":" -f 1,2 /etc/shadow | grep -v -E -x '[^:]+:[!*]+')"
+# Only the first user may have a password
+test "$(wc -l <<<"$PASSWORD_USERS")" == 1
+# It is the first user
+test "${PASSWORD_USERS#${U}:}" != "$PASSWORD_USERS"
+
+
+
+# Root user
+
+# Non-distribution files
+mkdir /root/dist-mod
+
+# wget
+echo -e "content_disposition = on" >>/root/.wgetrc
+
+# sensible-utils
+echo 'SELECTED_EDITOR="/usr/bin/mcedit"' >/root/.selected_editor
+
+# @FIXME Which to choose? /root/.bashrc or /etc/skel/.bashrc
+
+# User settings for non-login shells
+cat >/root/.bashrc <<"EOF"
+
+#export LANG=en_US.UTF-8
+#export LC_ALL=en_US.UTF-8
+
+PS1exitstatus() { local RET="$?";if [ "$RET" -ne 0 ];then echo -n "$(tput setaf 7;tput setab 1)"'!'"$RET";fi; }
+# Yellow + Cyan: $(tput setaf 3) \u $(tput bold;tput setaf 6)
+export PS1="\[$(tput sgr0)\][\[$(tput setaf 3)\]\u\[$(tput bold;tput setaf 1)\]@\h\[$(tput sgr0)\]:\
+\[$(tput setaf 8;tput setab 4)\]\w\[$(tput sgr0)\]:\t:\
+\[$(tput bold)\]\!\[\$(PS1exitstatus;tput sgr0)\]]\n"
+
+# Address of the primary network interface
+GATEWAY="$(ip -4 route show to default | sed -n -e '0,/^default via \(\S\+\).*$/s//\1/p')"
+export IP="$(ip -4 route get "$GATEWAY" | sed -n -e '0,/^.*\ssrc \(\S\+\).*$/s//\1/p')"
+
+export LS_OPTIONS='--color=auto'
+eval "$(dircolors)"
+alias ls='ls $LS_OPTIONS'
+alias ll='ls $LS_OPTIONS -l'
+alias l='ls $LS_OPTIONS -lA'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+alias grep='grep --color'
+alias iotop='iotop -d 0.1 -qqq -o'
+alias iftop='NCURSES_NO_UTF8_ACS=1 iftop -nP'
+alias transit='xz -9 | base64 -w $((COLUMNS-1))'
+alias transit-receive='base64 -d | xz -d'
+alias changelog='xargs -I % -- zless /usr/share/doc/%/changelog.Debian.gz <<<'
+alias kernels="dpkg-query --showformat='\${Package}\\n' --show 'linux-image-[345].*'"
+#alias readmail='MAIL=/var/mail/MAILDIR/ mail'
+# apt-get install tcpdump tcpflow
+#alias httpdump='tcpdump -i eth0 -nn -s 1500 -l -w - "dst port 80 and dst host ${IP}" | tcpflow -c -r -'
+# http://www.vim.org/scripts/script.php?script_id=658
+#alias email='vim -c "startinsert" /tmp/message.eml'
+LESS="-S"
+EOF
+
+# User settings for login shells
+cat >/root/.profile <<"EOF"
+# ~/.profile: executed by Bourne-compatible login shells.
+
+if [ "$BASH" ]; then
+  if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+  fi
+fi
+
+mesg n
+
+# Set the title on PuTTY terminals also
+case "$TERM" in
+    putty*)
+        PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+        ;;
+    *)
+        ;;
+esac
+
+# PuTTY Connection / Data / Terminal-type string: putty-256color
+# ls -1 /usr/share/mc/skins/|sed -e 's/\.ini$//g'
+if [[ $EUID -eq 0 ]]; then
+    if [ "${TERM/256/}" == "$TERM" ]; then
+        export MC_SKIN="modarcon16root-defbg-thin"
+    else
+        export MC_SKIN="modarin256root-defbg-thin"
+    fi
+else
+    if [ "${TERM/256/}" == "$TERM" ]; then
+        export MC_SKIN="modarcon16"
+    else
+        export MC_SKIN="xoria256"
+    fi
+fi
+
+# Colorized man pages with less
+#     update-alternatives --set pager /usr/bin/less
+#     man termcap # String Capabilities
+man()
+{
+    #
+    #     so   Start standout mode (search)
+    #     se   End standout mode
+    #     us   Start underlining (italic)
+    #     ue   End underlining
+    #     md   Start bold mode (highlight)
+    #     me   End all mode like so, us, mb, md and mr
+    env \
+        LESS_TERMCAP_so="$(tput setab 230)" \
+        LESS_TERMCAP_se="$(tput sgr0)" \
+        LESS_TERMCAP_us="$(tput setaf 2)" \
+        LESS_TERMCAP_ue="$(tput sgr0)" \
+        LESS_TERMCAP_md="$(tput bold)" \
+        LESS_TERMCAP_me="$(tput sgr0)" \
+        man "$@"
+}
+
+# Take a look at the plugin changelog
+wp_changelog()
+{
+    local PLUGIN="$1"
+
+    wget -qO- "http://api.wordpress.org/plugins/info/1.0/${PLUGIN}" \
+        | php -r '$i=unserialize(stream_get_contents(STDIN)); echo $i->sections["changelog"];' \
+        | w3m -T text/html
+#        | elinks -force-html
+}
+
+#echo "Long login HOTFIX: systemctl restart systemd-logind"
+EOF
+
+# Add mc syntax highlights
+ROOT_MC_SYNTAX="/root/.local/share/mc/mcedit"
+ROOT_MC_SYNTAX_CONFIG="/root/.config/mc/mcedit"
+mkdir -p "$ROOT_MC_SYNTAX"
+wget -nv -P "$ROOT_MC_SYNTAX" https://github.com/szepeviktor/debian-server-tools/raw/master/input/mc/email.syntax
+wget -nv -P "$ROOT_MC_SYNTAX" https://github.com/szepeviktor/debian-server-tools/raw/master/input/mc/markdown.syntax
+mkdir -p "$ROOT_MC_SYNTAX_CONFIG"
+{
+    wget -nv -O- https://github.com/szepeviktor/debian-server-tools/raw/master/input/mc/Syntax
+    #cat /usr/share/mc/syntax/Syntax
+    wget -nv -O- https://github.com/MidnightCommander/mc/raw/master/misc/syntax/Syntax.in
+} >"${ROOT_MC_SYNTAX_CONFIG}/Syntax"

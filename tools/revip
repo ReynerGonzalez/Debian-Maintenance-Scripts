@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# Reverse octets in an IPv4 address.
+#
+# VERSION       :2.0.0
+# DATE          :2019-11-28
+# AUTHOR        :Viktor Szépe <viktor@szepe.net>
+# URL           :https://github.com/szepeviktor/debian-server-tools
+# LICENSE       :The MIT License (MIT)
+# BASH-VERSION  :4.2+
+# LOCATION      :/usr/local/bin/revip
+
+# Alternative
+#     sed -e 's|^\([0-9]\{1,3\}\)\.\([0-9]\{1,3\}\)\.\([0-9]\{1,3\}\)\.\([0-9]\{1,3\}\)$|\4.\3.\2.\1|'
+
+Reverse_string() {
+    local STRING="$1"
+    local DELIM="${2:0:1}"
+
+    tr "$DELIM" '\n' <<<"$STRING" \
+        | tac \
+        | paste -s -d "$DELIM"
+}
+
+Reverse_string "$1" "."

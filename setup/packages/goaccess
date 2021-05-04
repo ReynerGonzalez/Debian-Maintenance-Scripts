@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e -x
+
+# @nonDebian
+Pkg_install_quiet goaccess

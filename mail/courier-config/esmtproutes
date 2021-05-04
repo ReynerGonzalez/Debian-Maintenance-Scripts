@@ -1,0 +1,8 @@
+szepe.net: mail.szepe.net,25 /SECURITY=REQUIRED
+#satellite.this.fqdn: mail.szepe.net,25 /SECURITY=REQUIRED
+
+#: email-smtp.eu-west-1.amazonaws.com,587 /SECURITY=REQUIRED
+#: smtp.sparkpostmail.com,587 /SECURITY=REQUIRED
+#: smtp-relay.gmail.com,587 /SECURITY=REQUIRED
+#: smtp.gmail.com,587 /SECURITY=REQUIRED
+#: smtp.gmail.com,465 /SECURITY=SMTPS

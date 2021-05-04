@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /
+Allow: /site/wp-includes/
+Allow: /wp-content/
+Host: www.example.com
+
+Sitemap: https://www.example.com/sitemap_index.xml

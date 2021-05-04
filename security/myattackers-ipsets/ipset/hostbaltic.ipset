@@ -1,0 +1,20 @@
+# AS209605 - UAB Host Baltic / Serveroffer / Connected to AS57043 HOSTKEY
+#: ipset -exist restore <ipset/hostbaltic.ipset
+#: iptables -w -I myattackers-ipset -m set --match-set hostbaltic src -j REJECT
+create hostbaltic hash:net family inet hashsize 64 maxelem 32
+flush hostbaltic
+#add hostbaltic 141.98.8.0/24
+#add hostbaltic 141.98.9.0/24
+add hostbaltic 141.98.10.0/24
+# Online Marketing Sources Kft.
+add hostbaltic 141.98.11.0/24
+
+# AS133398 - TELE-AS / Tele Asia
+#add hostbaltic 45.123.190.0/24
+#add hostbaltic 45.125.66.0/24
+# Serveroffer: "Please drop 185.36.81.0/24 subnet"
+add hostbaltic 185.36.81.0/24
+
+# AS135392 - HostBaltic
+add hostbaltic 185.143.72.0/24
+#add hostbaltic 212.95.148.0/24
